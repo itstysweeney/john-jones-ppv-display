@@ -1,7 +1,8 @@
 const DEFAULT_CONTENT = window.JJ_DEFAULT_CONTENT || {
   heading: "FEATURED UPFITS", subheading: "INTERACTIVE BUILD GALLERY",
   attractHeading: "PURPOSE BUILT FOR THE MISSION", attractEyebrow: "JOHN JONES FEATURED UPFITS",
-  idleSeconds: 45, slideshowSeconds: 5, lightDurationSeconds: 15, shellyPlugs: [],
+  idleSeconds: 45, slideshowSeconds: 5, showLightControl: true, lightButtonLabel: "Activate Lights",
+  lightButtonDescription: "Light Bar Demo", lightDurationSeconds: 15, shellyPlugs: [],
   upfits: [
     {title:"Dodge Chargers",images:["assets/categories/charger-1.jpg","assets/categories/charger-2.jpg","assets/categories/charger-3.jpg"]},
     {title:"RAM Trucks",images:["assets/categories/ram-1.jpg","assets/categories/ram-2.jpg","assets/categories/ram-3.jpg"]},
@@ -18,34 +19,62 @@ const DEFAULT_CONTENT = window.JJ_DEFAULT_CONTENT || {
 };
 
 let content = DEFAULT_CONTENT, activeUpfit = 0, activePhoto = 0, swipeX = 0;
-let idleTimer = null, slideshowTimer = null, slideshowIndex = 0, countdownTimer = null, secondsLeft = 0;
+let idleTimer = null, idleDeadline = 0, slideshowTimer = null, slideshowIndex = 0, countdownTimer = null, secondsLeft = 0;
+let contentSignature = "";
 const grid = document.querySelector("#upfitGrid"), viewer = document.querySelector("#viewer"), attract = document.querySelector("#attractScreen");
 const settings = window.JJ_LIGHTS || {}, lightsButton = document.querySelector("#lightsButton");
 
 async function loadContent() {
-  try {
-    const saved = localStorage.getItem("jj-display-content");
-    if (saved) {
-      content = JSON.parse(saved);
-      normalizeUpfits();
-      renderDisplay();
-      return;
-    }
-  } catch {}
-  try {
-    const response = await fetch("api/content", {cache:"no-store"});
-    if (!response.ok) throw new Error();
-    content = await response.json();
-  } catch {
+  let loaded = false;
+  if (location.protocol === "file:") {
     try {
-      const response = await fetch("content.json", {cache:"no-store"});
-      if (response.ok) content = await response.json();
+      const saved = localStorage.getItem("jj-display-content");
+      if (saved) {
+        content = JSON.parse(saved);
+        loaded = true;
+      }
+    } catch {}
+  }
+  if (!loaded && !location.hostname.endsWith(".github.io")) {
+    try {
+      const response = await fetch("api/content", {cache:"no-store"});
+      if (!response.ok) throw new Error();
+      content = await response.json();
+      loaded = true;
+    } catch {}
+  }
+  if (!loaded) {
+    try {
+      const response = await fetch(`content.json?updated=${Date.now()}`, {cache:"no-store"});
+      if (response.ok) {
+        content = await response.json();
+        loaded = true;
+      }
     } catch {}
   }
   normalizeUpfits();
+  contentSignature = JSON.stringify(content);
   renderDisplay();
+  if (location.protocol !== "file:") setInterval(checkForContentUpdates, 30000);
+}
+async function checkForContentUpdates() {
+  try {
+    const response = await fetch(`content.json?updated=${Date.now()}`, {cache:"no-store"});
+    if (!response.ok) return;
+    const next = await response.json(), signature = JSON.stringify(next);
+    if (signature === contentSignature) return;
+    content = next;
+    normalizeUpfits();
+    contentSignature = JSON.stringify(content);
+    viewer.classList.remove("open");
+    viewer.setAttribute("aria-hidden","true");
+    renderDisplay();
+  } catch {}
 }
 function normalizeUpfits(){
+  content.showLightControl = content.showLightControl !== false;
+  content.lightButtonLabel ||= "Activate Lights";
+  content.lightButtonDescription ||= "Light Bar Demo";
   content.upfits = Array.isArray(content.upfits) ? content.upfits : [];
   content.upfits.forEach(upfit=>{
     upfit.images = Array.isArray(upfit.images) ? upfit.images : [];
@@ -56,6 +85,7 @@ function normalizeUpfits(){
   });
 }
 function renderDisplay() {
+  document.body.classList.toggle("hide-light-control", !content.showLightControl);
   document.querySelector(".topbar span").textContent = content.subheading;
   document.querySelector(".topbar h1").textContent = content.heading;
   document.querySelector("#attractTitle").textContent = content.attractHeading;
@@ -109,7 +139,16 @@ function renderAttract(slides){
   document.querySelector("#attractEyebrow").textContent=slide.title.toUpperCase();
 }
 function stopAttract(){clearInterval(slideshowTimer);attract.classList.remove("visible");attract.setAttribute("aria-hidden","true");resetIdle()}
-function resetIdle(){clearTimeout(idleTimer);idleTimer=setTimeout(startAttract,(Number(content.idleSeconds)||45)*1000)}
+function checkIdle(){
+  clearTimeout(idleTimer);
+  const remaining=idleDeadline-Date.now();
+  if(remaining<=0){startAttract();return}
+  idleTimer=setTimeout(checkIdle,Math.min(remaining,1000));
+}
+function resetIdle(){
+  idleDeadline=Date.now()+(Number(content.idleSeconds)||45)*1000;
+  checkIdle();
+}
 function lightDuration(){return Number(content.lightDurationSeconds)||Number(settings.durationSeconds)||15}
 function cleanShellyAddress(value){return String(value||"").trim().replace(/^https?:\/\//,"").replace(/\/+$/,"")}
 function shellyAddresses(){
@@ -127,8 +166,8 @@ async function sendShelly(on){
 }
 function updateLights(){
   const on=secondsLeft>0;document.body.classList.toggle("lights-on",on);
-  document.querySelector("#lightsLabel").textContent=on?`LIGHTS ON - ${String(secondsLeft).padStart(2,"0")}s`:"ACTIVATE LIGHTS";
-  document.querySelector("#lightsStatus").textContent=on?"Tap to turn off now":`LIGHT BAR DEMO - automatic ${lightDuration()} second shutoff`;
+  document.querySelector("#lightsLabel").textContent=on?`LIGHTS ON - ${String(secondsLeft).padStart(2,"0")}s`:content.lightButtonLabel.toUpperCase();
+  document.querySelector("#lightsStatus").textContent=on?"Tap to turn off now":`${content.lightButtonDescription.toUpperCase()} - automatic ${lightDuration()} second shutoff`;
   document.querySelector(".button-arrow").textContent=on?"X":">";
 }
 async function turnLightsOff(){clearInterval(countdownTimer);secondsLeft=0;updateLights();await sendShelly(false);resetIdle()}
@@ -141,4 +180,7 @@ document.querySelector("#exploreButton").addEventListener("click",stopAttract);
 document.querySelector("#attractScreen").addEventListener("pointerdown",stopAttract);
 lightsButton.addEventListener("click",()=>secondsLeft>0?turnLightsOff():turnLightsOn());
 document.addEventListener("pointerdown",e=>{if(!e.target.closest("#attractScreen"))resetIdle()});
+document.addEventListener("keydown",resetIdle);
+document.addEventListener("visibilitychange",()=>{if(!document.hidden)checkIdle()});
+setInterval(()=>{if(idleDeadline>0&&!attract.classList.contains("visible")&&Date.now()>=idleDeadline)startAttract()},1000);
 loadContent();

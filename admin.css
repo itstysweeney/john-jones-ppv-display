@@ -1,0 +1,56 @@
+:root{--navy:#003a8f;--blue:#337ab7;--red:#d7263d;--ink:#333;--gray:#eef1f4;--white:#fff}
+*{box-sizing:border-box}
+body{margin:0;background:var(--gray);color:var(--ink);font-family:Arial,sans-serif}
+button{cursor:pointer}
+header{height:110px;padding:12px 28px;background:var(--white);border-bottom:5px solid var(--blue);display:flex;align-items:center;gap:25px}
+header img{width:365px;height:82px;object-fit:contain;object-position:left center;border-right:1px solid #ddd;padding-right:22px}
+header span{font-size:9px;font-weight:800;letter-spacing:2px;color:var(--blue)}
+h1{margin:5px 0 0;font-size:25px;color:var(--navy)}
+header a{margin-left:auto;padding:14px 18px;color:var(--white);background:var(--blue);text-decoration:none;font-weight:800;font-size:12px}
+main{max-width:1200px;margin:auto;padding:25px}
+.github-publish{margin-bottom:22px;padding:20px;background:var(--navy);color:var(--white);border-left:8px solid var(--red);display:grid;grid-template-columns:1.35fr 1fr 1fr 1.3fr;gap:14px;align-items:end;box-shadow:0 3px 14px rgba(51,51,51,.16)}
+.github-publish span{color:#a9d8f5;font-size:9px;font-weight:800;letter-spacing:2px}
+.github-publish h2{margin:7px 0 5px}
+.github-publish p{margin:0;color:#d8e6f4;font-size:11px;line-height:1.45}
+.github-publish a{color:var(--white);font-weight:800}
+.github-publish label{color:var(--white)}
+.settings{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:22px}
+.light-show-settings{margin-bottom:22px;padding:20px;background:var(--white);border-top:7px solid var(--red);display:grid;grid-template-columns:1.25fr 1fr 1fr 1fr;gap:14px;align-items:end;box-shadow:0 3px 14px rgba(51,51,51,.1)}
+.light-show-settings span{color:var(--blue);font-size:9px;font-weight:800;letter-spacing:2px}
+.light-show-settings h2{margin:7px 0 4px;color:var(--navy)}
+.light-show-settings p{margin:0;color:#68717d;font-size:11px;line-height:1.5}
+.visibility-toggle{min-height:43px;padding:10px 12px;background:var(--gray);display:flex;align-items:center;gap:10px}
+.visibility-toggle input{width:22px;height:22px;margin:0;accent-color:var(--navy)}
+.visibility-toggle span{color:var(--ink);font-size:10px;letter-spacing:.4px}
+label{display:grid;gap:6px;font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.6px}
+input,textarea{padding:0 11px;border:1px solid #cdd3db;background:var(--white);color:var(--ink);font:inherit}
+input{height:43px}
+textarea{min-height:86px;padding-top:10px;resize:vertical;line-height:1.45}
+.shelly-setup{margin-bottom:25px;padding:20px;background:var(--white);color:var(--ink);border-top:7px solid var(--navy);display:grid;grid-template-columns:1fr auto auto;gap:16px;align-items:end;box-shadow:0 3px 14px rgba(51,51,51,.1)}
+.shelly-setup span{color:var(--blue);font-size:9px;font-weight:800;letter-spacing:2px}
+.shelly-setup h2{margin:7px 0 4px;color:var(--navy)}
+.shelly-setup p{margin:0;color:#68717d;font-size:11px;line-height:1.5;max-width:650px}
+.shelly-setup>button,.shelly-row button{height:43px;padding:0 18px;border:0;background:var(--blue);color:var(--white);font-size:11px;font-weight:900;text-transform:uppercase}
+.shelly-setup>button#testLights{background:var(--navy)}
+.shelly-list{grid-column:1/-1;display:grid;gap:8px;margin-top:4px}
+.shelly-row{display:grid;grid-template-columns:1fr 1.3fr auto auto;gap:8px;align-items:end;padding:12px;background:var(--gray);border-left:5px solid var(--blue)}
+.shelly-row button.remove-shelly{background:transparent;color:var(--red);border:1px solid var(--red)}
+.shelly-empty{padding:18px;border:2px dashed #cbd2da;color:#68717d;text-align:center;font-size:12px;font-weight:700}
+.editor-heading{display:flex;align-items:center;justify-content:space-between;margin:10px 0 13px}
+.editor-heading h2{margin:0;color:var(--navy)}
+.editor-heading button{height:43px;padding:0 18px;border:0;background:var(--blue);color:var(--white);font-size:11px;font-weight:900;text-transform:uppercase}
+.editor{display:grid;grid-template-columns:1fr;gap:14px}
+.item{position:relative;padding:16px;background:var(--white);border:1px solid #d9dee5}
+.item h2{margin:0 0 12px;font-size:17px;color:var(--navy)}
+.build-fields{display:grid;grid-template-columns:.55fr 1.45fr 1fr;gap:10px;margin:10px 0}
+.remove-section{position:absolute;right:16px;top:12px;border:0;background:none;color:var(--red);font-size:10px;font-weight:900;text-transform:uppercase}
+.photos{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin:12px 0}
+.photo{position:relative;aspect-ratio:1.25;background:#ddd}
+.photo img{width:100%;height:100%;object-fit:cover}
+.photo button{position:absolute;right:4px;top:4px;width:26px;height:26px;border:0;background:var(--navy);color:var(--white)}
+.upload{height:auto;padding:10px;background:#f4f6f8}
+.save{width:100%;height:60px;margin-top:22px;border:0;border-left:8px solid var(--red);background:var(--blue);color:var(--white);font-weight:900;text-transform:uppercase}
+.message{text-align:center;font-weight:700}
+.message.error{color:#b61e2b}
+.message.success{color:#15733c}
+@media(max-width:800px){header img{width:220px}.github-publish,.settings,.light-show-settings,.editor,.shelly-setup,.shelly-row,.build-fields{grid-template-columns:1fr}.photos{grid-template-columns:repeat(2,1fr)}.shelly-list{grid-column:auto}}
