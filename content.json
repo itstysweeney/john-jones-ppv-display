@@ -3,7 +3,7 @@
   "subheading": "INTERACTIVE BUILD GALLERY",
   "attractHeading": "PURPOSE BUILT FOR THE MISSION",
   "attractEyebrow": "JOHN JONES FEATURED UPFITS",
-  "idleSeconds": 45,
+  "idleSeconds": 5,
   "slideshowSeconds": 5,
   "showLightControl": true,
   "lightButtonLabel": "Activate Lights",
@@ -18,7 +18,11 @@
         "assets/categories/charger-1.jpg",
         "assets/categories/charger-2.jpg",
         "assets/categories/charger-3.jpg"
-      ]
+      ],
+      "modelYear": "Model Year Varies",
+      "builtFor": "Featured Agency Build",
+      "agencyType": "Law Enforcement",
+      "description": "Agency-specific, mission-ready configuration focused on officer safety, operational efficiency, OEM compliance, and long-term serviceability."
     },
     {
       "title": "RAM Trucks",
@@ -26,13 +30,21 @@
         "assets/categories/ram-1.jpg",
         "assets/categories/ram-2.jpg",
         "assets/categories/ram-3.jpg"
-      ]
+      ],
+      "modelYear": "Model Year Varies",
+      "builtFor": "Featured Agency Build",
+      "agencyType": "Law Enforcement",
+      "description": "Agency-specific, mission-ready configuration focused on officer safety, operational efficiency, OEM compliance, and long-term serviceability."
     },
     {
       "title": "Chevrolet Tahoes",
       "images": [
         "assets/tahoe.jpg"
-      ]
+      ],
+      "modelYear": "Model Year Varies",
+      "builtFor": "Featured Agency Build",
+      "agencyType": "Law Enforcement",
+      "description": "Agency-specific, mission-ready configuration focused on officer safety, operational efficiency, OEM compliance, and long-term serviceability."
     },
     {
       "title": "Dodge Durangos",
@@ -40,7 +52,11 @@
         "assets/categories/durango-1.jpg",
         "assets/categories/durango-2.jpg",
         "assets/categories/durango-3.jpg"
-      ]
+      ],
+      "modelYear": "Model Year Varies",
+      "builtFor": "Featured Agency Build",
+      "agencyType": "Law Enforcement",
+      "description": "Agency-specific, mission-ready configuration focused on officer safety, operational efficiency, OEM compliance, and long-term serviceability."
     },
     {
       "title": "RAM ProMasters",
@@ -48,7 +64,11 @@
         "assets/categories/promaster-1.png",
         "assets/categories/promaster-2.png",
         "assets/categories/promaster-3.png"
-      ]
+      ],
+      "modelYear": "Model Year Varies",
+      "builtFor": "Featured Agency Build",
+      "agencyType": "Law Enforcement",
+      "description": "Agency-specific, mission-ready configuration focused on officer safety, operational efficiency, OEM compliance, and long-term serviceability."
     },
     {
       "title": "Dodge Grand Caravans",
@@ -56,7 +76,11 @@
         "assets/categories/caravan-1.jpg",
         "assets/categories/caravan-2.jpg",
         "assets/categories/caravan-3.jpg"
-      ]
+      ],
+      "modelYear": "Model Year Varies",
+      "builtFor": "Featured Agency Build",
+      "agencyType": "Law Enforcement",
+      "description": "Agency-specific, mission-ready configuration focused on officer safety, operational efficiency, OEM compliance, and long-term serviceability."
     },
     {
       "title": "Jeep Grand Cherokee",
@@ -64,14 +88,22 @@
         "assets/categories/grand-cherokee-1.jpg",
         "assets/categories/grand-cherokee-2.jpg",
         "assets/categories/grand-cherokee-3.jpg"
-      ]
+      ],
+      "modelYear": "Model Year Varies",
+      "builtFor": "Featured Agency Build",
+      "agencyType": "Law Enforcement",
+      "description": "Agency-specific, mission-ready configuration focused on officer safety, operational efficiency, OEM compliance, and long-term serviceability."
     },
     {
       "title": "UTV",
       "images": [
         "assets/categories/utv-1.jpg",
         "assets/categories/utv-2.jpg"
-      ]
+      ],
+      "modelYear": "Model Year Varies",
+      "builtFor": "Featured Agency Build",
+      "agencyType": "Law Enforcement",
+      "description": "Agency-specific, mission-ready configuration focused on officer safety, operational efficiency, OEM compliance, and long-term serviceability."
     },
     {
       "title": "Chevrolet Silverados",
@@ -79,7 +111,11 @@
         "assets/builds/rowan-1.jpg",
         "assets/builds/rowan-7.jpg",
         "assets/builds/rowan-8.jpg"
-      ]
+      ],
+      "modelYear": "Model Year Varies",
+      "builtFor": "Featured Agency Build",
+      "agencyType": "Law Enforcement",
+      "description": "Agency-specific, mission-ready configuration focused on officer safety, operational efficiency, OEM compliance, and long-term serviceability."
     },
     {
       "title": "Chevrolet Suburban",
@@ -87,7 +123,11 @@
         "assets/categories/suburban-1.jpg",
         "assets/categories/suburban-2.png",
         "assets/categories/suburban-3.jpg"
-      ]
+      ],
+      "modelYear": "Model Year Varies",
+      "builtFor": "Featured Agency Build",
+      "agencyType": "Law Enforcement",
+      "description": "Agency-specific, mission-ready configuration focused on officer safety, operational efficiency, OEM compliance, and long-term serviceability."
     },
     {
       "title": "Jeep Gladiator",
@@ -95,7 +135,11 @@
         "assets/categories/gladiator-1.png",
         "assets/categories/gladiator-2.png",
         "assets/categories/gladiator-3.png"
-      ]
+      ],
+      "modelYear": "Model Year Varies",
+      "builtFor": "Featured Agency Build",
+      "agencyType": "Law Enforcement",
+      "description": "Agency-specific, mission-ready configuration focused on officer safety, operational efficiency, OEM compliance, and long-term serviceability."
     }
   ]
 }
