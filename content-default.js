@@ -1,0 +1,24 @@
+window.JJ_DEFAULT_CONTENT = {
+  heading: "FEATURED UPFITS",
+  subheading: "INTERACTIVE BUILD GALLERY",
+  attractHeading: "PURPOSE BUILT FOR THE MISSION",
+  attractEyebrow: "JOHN JONES FEATURED UPFITS",
+  idleSeconds: 45,
+  slideshowSeconds: 5,
+  lightDurationSeconds: 15,
+  shellyIp: "",
+  shellyPlugs: [],
+  upfits: [
+    {title:"Dodge Chargers",images:["assets/categories/charger-1.jpg","assets/categories/charger-2.jpg","assets/categories/charger-3.jpg"]},
+    {title:"RAM Trucks",images:["assets/categories/ram-1.jpg","assets/categories/ram-2.jpg","assets/categories/ram-3.jpg"]},
+    {title:"Chevrolet Tahoes",images:["assets/tahoe.jpg"]},
+    {title:"Dodge Durangos",images:["assets/categories/durango-1.jpg","assets/categories/durango-2.jpg","assets/categories/durango-3.jpg"]},
+    {title:"RAM ProMasters",images:["assets/categories/promaster-1.png","assets/categories/promaster-2.png","assets/categories/promaster-3.png"]},
+    {title:"Dodge Grand Caravans",images:["assets/categories/caravan-1.jpg","assets/categories/caravan-2.jpg","assets/categories/caravan-3.jpg"]},
+    {title:"Jeep Grand Cherokee",images:["assets/categories/grand-cherokee-1.jpg","assets/categories/grand-cherokee-2.jpg","assets/categories/grand-cherokee-3.jpg"]},
+    {title:"UTV",images:["assets/categories/utv-1.jpg","assets/categories/utv-2.jpg"]},
+    {title:"Chevrolet Silverados",images:["assets/builds/rowan-1.jpg","assets/builds/rowan-7.jpg","assets/builds/rowan-8.jpg"]},
+    {title:"Chevrolet Suburban",images:["assets/categories/suburban-1.jpg","assets/categories/suburban-2.png","assets/categories/suburban-3.jpg"]},
+    {title:"Jeep Gladiator",images:["assets/categories/gladiator-1.png","assets/categories/gladiator-2.png","assets/categories/gladiator-3.png"]}
+  ]
+};

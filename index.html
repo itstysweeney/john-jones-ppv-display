@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta name="theme-color" content="#003a8f">
+  <title>John Jones Featured Upfits</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <img src="assets/ppv-white-full-logo.png" alt="John Jones Police Pursuit Vehicles">
+    <div><span>INTERACTIVE BUILD GALLERY</span><h1>FEATURED UPFITS</h1></div>
+  </header>
+
+  <main><section class="grid" id="upfitGrid" aria-label="Featured upfit categories"></section></main>
+
+  <footer class="light-control">
+    <button id="lightsButton">
+      <span class="light-icon"><i></i><i></i></span>
+      <span class="button-copy"><strong id="lightsLabel">ACTIVATE LIGHTS</strong><small id="lightsStatus">LIGHT BAR DEMO - automatic 15 second shutoff</small></span>
+      <span class="button-arrow">&gt;</span>
+    </button>
+  </footer>
+
+  <section class="viewer" id="viewer" aria-hidden="true">
+    <button id="closeViewer" aria-label="Close">X</button>
+    <div class="viewer-title"><span>FEATURED UPFIT</span><h2 id="viewerTitle">DODGE CHARGER</h2><small id="viewerCounter">01 / 03</small></div>
+    <button class="photo-stage" id="photoStage" aria-label="View next photo"><img id="viewerImage" src="" alt=""><span>Tap or swipe for next photo</span></button>
+    <div class="dots" id="viewerDots"></div>
+    <aside class="viewer-profile">
+      <span class="profile-kicker">BUILD PROFILE</span>
+      <div class="profile-facts">
+        <div><span>MODEL YEAR</span><strong id="viewerYear">MODEL YEAR VARIES</strong></div>
+        <div><span>BUILT FOR</span><strong id="viewerBuiltFor">FEATURED AGENCY BUILD</strong></div>
+        <div><span>AGENCY TYPE</span><strong id="viewerAgencyType">LAW ENFORCEMENT</strong></div>
+      </div>
+      <p id="viewerDescription">Agency-specific, mission-ready configuration focused on officer safety and operational efficiency.</p>
+    </aside>
+  </section>
+
+  <section class="attract" id="attractScreen" aria-hidden="true">
+    <img id="attractImage" src="" alt="">
+    <div class="attract-shade"></div>
+    <div class="attract-light red"></div>
+    <div class="attract-light blue"></div>
+    <div class="attract-topline"><i></i><i></i></div>
+    <div class="attract-brand">
+      <img class="attract-logo" src="assets/ppv-white-full-logo.png" alt="John Jones Police Pursuit Vehicles">
+    </div>
+    <div class="attract-copy">
+      <p>REAL BUILDS. REAL MISSIONS.</p>
+      <span id="attractEyebrow">JOHN JONES FEATURED UPFITS</span>
+      <h2 id="attractTitle">PURPOSE BUILT FOR THE MISSION</h2>
+      <button id="exploreButton"><i><b></b></i><span><small>READY TO EXPLORE?</small><strong>TAP ANYWHERE TO BEGIN</strong><em>VIEW FEATURED POLICE VEHICLE BUILDS</em></span><b class="explore-arrow">&gt;</b></button>
+    </div>
+    <div class="attract-marquee">
+      <div class="attract-marquee-track">
+        <div class="attract-marquee-group">POLICE VEHICLES <b>/</b> FIRE & EMS <b>/</b> K-9 UPFITS <b>/</b> SCHOOL RESOURCE <b>/</b> SPECIALTY BUILDS <b>/</b></div>
+        <div class="attract-marquee-group" aria-hidden="true">POLICE VEHICLES <b>/</b> FIRE & EMS <b>/</b> K-9 UPFITS <b>/</b> SCHOOL RESOURCE <b>/</b> SPECIALTY BUILDS <b>/</b></div>
+      </div>
+    </div>
+  </section>
+
+  <script src="config.js"></script>
+  <script src="content-default.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
