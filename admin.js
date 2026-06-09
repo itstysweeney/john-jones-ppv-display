@@ -72,19 +72,31 @@ function showMode() {
 function render() {
   renderShellys();
   const editor = document.querySelector("#editor");
-  editor.innerHTML = content.upfits.map((upfit,index)=>`<article class="item">
-    <h2>Section ${index+1}</h2>
-    <button class="remove-section" data-remove-section="${index}">Remove Section</button>
-    <label>Vehicle / Display Title<input data-title="${index}" value="${escapeHtml(upfit.title)}" placeholder="Example: Chevrolet Silverado"></label>
-    <div class="build-fields">
-      <label>Model Year<input data-build-field="modelYear:${index}" value="${escapeHtml(upfit.modelYear)}" placeholder="Example: 2025"></label>
-      <label>Built For<input data-build-field="builtFor:${index}" value="${escapeHtml(upfit.builtFor)}" placeholder="Example: Clark County Sheriff's Office"></label>
-      <label>Agency Type<input data-build-field="agencyType:${index}" value="${escapeHtml(upfit.agencyType)}" placeholder="Example: Sheriff's Office"></label>
+  editor.innerHTML = content.upfits.map((upfit,index)=>`<details class="item">
+    <summary>
+      <i class="drag-handle" data-drag-index="${index}" draggable="true" title="Drag to reorder" aria-label="Drag ${escapeHtml(upfit.title)} to reorder"><b></b><b></b><b></b></i>
+      <img src="${upfit.images[0] || "assets/tahoe.jpg"}" alt="">
+      <span><strong>${escapeHtml(upfit.title)}</strong><small>Click to edit vehicle, details, and photos</small></span>
+      <b>EDIT</b>
+    </summary>
+    <div class="item-body">
+      <button class="remove-section" data-remove-section="${index}">Remove Upfit</button>
+      <label>Vehicle / Display Title<input data-title="${index}" value="${escapeHtml(upfit.title)}" placeholder="Example: Chevrolet Silverado"></label>
+      <div class="build-fields">
+        <label>Model Year<input data-build-field="modelYear:${index}" value="${escapeHtml(upfit.modelYear)}" placeholder="Example: 2025"></label>
+        <label>Built For<input data-build-field="builtFor:${index}" value="${escapeHtml(upfit.builtFor)}" placeholder="Example: Clark County Sheriff's Office"></label>
+        <label>Agency Type<input data-build-field="agencyType:${index}" value="${escapeHtml(upfit.agencyType)}" placeholder="Example: Sheriff's Office"></label>
+      </div>
+      <label>Upfit Description<textarea data-build-field="description:${index}" placeholder="Explain the mission, major equipment, and special features.">${escapeHtml(upfit.description)}</textarea></label>
+      <div class="photos">${upfit.images.map((image,imageIndex)=>`<div class="photo"><img src="${image}"><button data-remove="${index}:${imageIndex}">X</button></div>`).join("")}</div>
+      <label class="upload">Add Photos<input data-upload="${index}" type="file" accept="image/*" multiple></label>
     </div>
-    <label>Upfit Description<textarea data-build-field="description:${index}" placeholder="Explain the mission, major equipment, and special features.">${escapeHtml(upfit.description)}</textarea></label>
-    <div class="photos">${upfit.images.map((image,imageIndex)=>`<div class="photo"><img src="${image}"><button data-remove="${index}:${imageIndex}">X</button></div>`).join("")}</div>
-    <label class="upload">Add Photos<input data-upload="${index}" type="file" accept="image/*" multiple></label>
-  </article>`).join("");
+  </details>`).join("");
+  document.querySelectorAll(".item").forEach(item=>item.addEventListener("toggle",()=>{
+    if(!item.open)return;
+    document.querySelectorAll(".item[open]").forEach(other=>{if(other!==item)other.open=false});
+  }));
+  enableUpfitReordering();
   document.querySelectorAll("[data-title]").forEach(input=>input.addEventListener("input",()=>content.upfits[Number(input.dataset.title)].title=input.value));
   document.querySelectorAll("[data-build-field]").forEach(input=>input.addEventListener("input",()=>{
     const [field,index]=input.dataset.buildField.split(":");
@@ -96,6 +108,45 @@ function render() {
     content.upfits.splice(Number(button.dataset.removeSection),1);
     render();
   }));
+}
+
+function enableUpfitReordering(){
+  let draggedIndex = null;
+  const clearDropState=()=>document.querySelectorAll(".item").forEach(item=>item.classList.remove("drop-before","drop-after"));
+  const clearDragState=()=>document.querySelectorAll(".item").forEach(item=>item.classList.remove("dragging","drop-before","drop-after"));
+  document.querySelectorAll(".drag-handle").forEach(handle=>{
+    handle.addEventListener("click",event=>{event.preventDefault();event.stopPropagation()});
+    handle.addEventListener("dragstart",event=>{
+      draggedIndex=Number(handle.dataset.dragIndex);
+      event.dataTransfer.effectAllowed="move";
+      event.dataTransfer.setData("text/plain",String(draggedIndex));
+      handle.closest(".item").classList.add("dragging");
+    });
+    handle.addEventListener("dragend",()=>{draggedIndex=null;clearDragState()});
+  });
+  document.querySelectorAll(".item").forEach((item,targetIndex)=>{
+    item.addEventListener("dragover",event=>{
+      if(draggedIndex===null||draggedIndex===targetIndex)return;
+      event.preventDefault();
+      clearDropState();
+      item.classList.add(event.clientY<item.getBoundingClientRect().top+item.offsetHeight/2?"drop-before":"drop-after");
+    });
+    item.addEventListener("drop",event=>{
+      event.preventDefault();
+      if(draggedIndex===null||draggedIndex===targetIndex)return clearDragState();
+      const insertAfter=item.classList.contains("drop-after");
+      const [moved]=content.upfits.splice(draggedIndex,1);
+      let insertIndex=targetIndex;
+      if(draggedIndex<targetIndex)insertIndex-=1;
+      if(insertAfter)insertIndex+=1;
+      content.upfits.splice(insertIndex,0,moved);
+      draggedIndex=null;
+      render();
+      const movedRow=document.querySelectorAll(".item")[insertIndex];
+      movedRow?.classList.add("just-moved");
+      movedRow?.scrollIntoView({behavior:"smooth",block:"center"});
+    });
+  });
 }
 
 function renderShellys() {
@@ -224,7 +275,8 @@ document.querySelector("#addSection").addEventListener("click",()=>{
     images:["assets/tahoe.jpg"]
   });
   render();
-  document.querySelector(".item:last-child")?.scrollIntoView({behavior:"smooth",block:"center"});
+  const added=document.querySelector(".item:last-child");
+  if(added){added.open=true;added.scrollIntoView({behavior:"smooth",block:"center"})}
 });
 
 document.querySelector("#addShelly").addEventListener("click",()=>{

@@ -94,7 +94,7 @@ function renderDisplay() {
     const button = document.createElement("button");
     button.className = "upfit-card";
     button.style.setProperty("--motion-delay",`${index * -0.8}s`);
-    button.innerHTML = `<img src="${upfit.images[0]}" alt=""><div><span>FEATURED UPFIT ${String(index + 1).padStart(2,"0")}</span><strong>${upfit.title}</strong></div>`;
+    button.innerHTML = `<img src="${upfit.images[0]}" alt=""><div><strong>${upfit.title}</strong></div>`;
     button.addEventListener("click", () => openViewer(index));
     grid.appendChild(button);
   });

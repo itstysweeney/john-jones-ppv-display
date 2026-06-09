@@ -70,8 +70,8 @@ body.lights-on .light-icon i:last-child{animation:blueFlash .65s .23s infinite}
 
 .attract{display:none;position:fixed;z-index:300;inset:0;background:var(--deep);color:var(--white);overflow:hidden;cursor:pointer}
 .attract.visible{display:block}
-.attract>img:first-child{position:absolute;inset:235px 0 546px;width:100%;height:calc(100% - 781px);object-fit:contain;object-position:center;background:#030b17;animation:attractFade .7s ease-out}
-.attract-shade{position:absolute;inset:235px 0 546px;background:rgba(7,21,43,.08);pointer-events:none}
+.attract>img:first-child{position:absolute;inset:675px 0 76px;width:100%;height:calc(100% - 751px);object-fit:contain;object-position:center;background:#030b17;animation:attractFade .7s ease-out}
+.attract-shade{position:absolute;inset:675px 0 76px;background:rgba(7,21,43,.08);pointer-events:none}
 .attract-light{display:none}
 .attract-topline{position:absolute;z-index:4;left:0;right:0;top:227px;height:8px;display:flex}
 .attract-topline i{flex:1}
@@ -79,12 +79,12 @@ body.lights-on .light-icon i:last-child{animation:blueFlash .65s .23s infinite}
 .attract-topline i:last-child{background:var(--blue);animation:blueFlash .8s .27s infinite}
 .attract-brand{position:absolute;z-index:3;left:0;right:0;top:0;height:235px;padding:20px 46px;display:flex;align-items:center;justify-content:center;background:var(--deep)}
 .attract-logo{display:block;width:min(920px,90vw);height:195px;object-fit:contain;object-position:center}
-.attract-copy{position:absolute;z-index:3;left:0;right:0;bottom:76px;height:470px;padding:38px 48px 44px;background:rgba(7,21,43,.97);border-top:8px solid var(--blue);box-shadow:0 -10px 25px rgba(0,0,0,.4)}
+.attract-copy{position:absolute;z-index:3;left:0;right:0;top:235px;height:440px;padding:30px 48px 32px;background:rgba(7,21,43,.97);border-top:8px solid var(--blue);border-bottom:8px solid var(--blue);box-shadow:0 10px 25px rgba(0,0,0,.4)}
 .attract-copy p{margin:0 0 18px;color:var(--white);font-size:13px;font-weight:700;letter-spacing:3px}
 .attract-copy p::before{content:"";display:inline-block;width:42px;height:4px;margin-right:13px;vertical-align:middle;background:var(--blue)}
 .attract-copy>span{display:inline-block;padding:10px 14px;color:var(--white);background:var(--blue);font-size:12px;font-weight:700;letter-spacing:2px}
-.attract-copy h2{max-width:980px;margin:20px 0 28px;color:var(--white);font:600 68px/.88 Montserrat,Arial,sans-serif;letter-spacing:0}
-.attract-copy button{width:100%;height:138px;padding:0 30px;border:4px solid #85bce5;border-left:14px solid var(--red);background:var(--navy);color:var(--white);display:grid;grid-template-columns:72px 1fr 42px;align-items:center;gap:26px;text-align:left;animation:tapPulse 1.5s ease-in-out infinite}
+.attract-copy h2{max-width:980px;margin:16px 0 22px;color:var(--white);font:600 60px/.88 Montserrat,Arial,sans-serif;letter-spacing:0}
+.attract-copy button{width:100%;height:126px;padding:0 30px;border:4px solid #85bce5;border-left:14px solid var(--red);background:var(--navy);color:var(--white);display:grid;grid-template-columns:72px 1fr 42px;align-items:center;gap:26px;text-align:left;animation:tapPulse 1.5s ease-in-out infinite}
 .attract-copy button>i{position:relative;display:grid;place-items:center;width:58px;height:58px;border:4px solid var(--white);border-radius:50%}
 .attract-copy button>i::before,.attract-copy button>i::after{content:"";position:absolute;border:2px solid rgba(255,255,255,.7);border-radius:50%;animation:touchWave 1.8s ease-out infinite}
 .attract-copy button>i::before{inset:-12px}
@@ -120,12 +120,12 @@ body.lights-on .light-icon i:last-child{animation:blueFlash .65s .23s infinite}
   .button-copy strong{font-size:26px}
   .attract-brand{height:190px;padding:20px 30px}
   .attract-logo{width:86vw;height:145px}
-  .attract>img:first-child{inset:190px 0 444px;height:calc(100% - 634px)}
-  .attract-shade{inset:190px 0 444px;height:auto}
+  .attract>img:first-child{inset:550px 0 64px;height:calc(100% - 614px)}
+  .attract-shade{inset:550px 0 64px;height:auto}
   .attract-topline{top:182px}
-  .attract-copy{bottom:64px;height:380px;padding:26px 30px 30px}
-  .attract-copy h2{font-size:48px}
-  .attract-copy button{height:125px;grid-template-columns:62px 1fr 30px;padding:0 22px;gap:18px}
+  .attract-copy{top:190px;bottom:auto;height:360px;padding:22px 30px 24px}
+  .attract-copy h2{margin:12px 0 18px;font-size:43px}
+  .attract-copy button{height:112px;grid-template-columns:62px 1fr 30px;padding:0 22px;gap:18px}
   .attract-copy button>i{width:50px;height:50px}
   .attract-copy button strong{font-size:28px}
   .attract-marquee{height:64px}
