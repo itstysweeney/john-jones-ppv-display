@@ -26,7 +26,7 @@
   <section class="viewer" id="viewer" aria-hidden="true">
     <button id="closeViewer" aria-label="Close">X</button>
     <div class="viewer-title"><span>FEATURED UPFIT</span><h2 id="viewerTitle">DODGE CHARGER</h2><small id="viewerCounter">01 / 03</small></div>
-    <button class="photo-stage" id="photoStage" aria-label="View next photo"><img id="viewerImage" src="" alt=""><span>Tap or swipe for next photo</span></button>
+    <div class="photo-stage" id="photoStage"><img id="viewerImage" src="" alt=""><video id="viewerVideo" controls playsinline preload="metadata"></video><button id="nextMedia">NEXT</button><span>Swipe or tap next to view more</span></div>
     <div class="dots" id="viewerDots"></div>
     <aside class="viewer-profile">
       <span class="profile-kicker">BUILD PROFILE</span>
@@ -41,6 +41,7 @@
 
   <section class="attract" id="attractScreen" aria-hidden="true">
     <img id="attractImage" src="" alt="">
+    <video id="attractVideo" muted autoplay playsinline preload="metadata"></video>
     <div class="attract-shade"></div>
     <div class="attract-light red"></div>
     <div class="attract-light blue"></div>

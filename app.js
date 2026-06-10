@@ -24,6 +24,15 @@ let contentSignature = "";
 const grid = document.querySelector("#upfitGrid"), viewer = document.querySelector("#viewer"), attract = document.querySelector("#attractScreen");
 const settings = window.JJ_LIGHTS || {}, lightsButton = document.querySelector("#lightsButton");
 
+function isVideo(value){
+  return /^data:video\//i.test(value||"")||/\.(mp4|webm|mov|m4v|ogv)(?:[?#].*)?$/i.test(value||"");
+}
+function cardMedia(source,title){
+  return isVideo(source)
+    ? `<video src="${source}" aria-label="${title}" muted autoplay loop playsinline preload="metadata"></video>`
+    : `<img src="${source}" alt="">`;
+}
+
 async function loadContent() {
   let loaded = false;
   if (location.protocol === "file:") {
@@ -94,7 +103,7 @@ function renderDisplay() {
     const button = document.createElement("button");
     button.className = "upfit-card";
     button.style.setProperty("--motion-delay",`${index * -0.8}s`);
-    button.innerHTML = `<img src="${upfit.images[0]}" alt=""><div><strong>${upfit.title}</strong></div>`;
+    button.innerHTML = `${cardMedia(upfit.images[0]||"assets/tahoe.jpg",upfit.title)}<div><strong>${upfit.title}</strong></div>`;
     button.addEventListener("click", () => openViewer(index));
     grid.appendChild(button);
   });
@@ -105,11 +114,18 @@ function openViewer(index) {
   stopAttract(); activeUpfit = index; activePhoto = 0; renderViewer();
   viewer.classList.add("open"); viewer.setAttribute("aria-hidden","false");
 }
-function closeViewer() { viewer.classList.remove("open"); viewer.setAttribute("aria-hidden","true"); resetIdle(); }
+function closeViewer() { document.querySelector("#viewerVideo").pause();viewer.classList.remove("open"); viewer.setAttribute("aria-hidden","true"); resetIdle(); }
 function renderViewer() {
   const upfit = content.upfits[activeUpfit];
+  const source=upfit.images[activePhoto], image=document.querySelector("#viewerImage"), video=document.querySelector("#viewerVideo");
   document.querySelector("#viewerTitle").textContent = upfit.title;
-  document.querySelector("#viewerImage").src = upfit.images[activePhoto];
+  if(isVideo(source)){
+    image.hidden=true;image.removeAttribute("src");
+    video.hidden=false;video.src=source;video.currentTime=0;video.play().catch(()=>{});
+  }else{
+    video.pause();video.hidden=true;video.removeAttribute("src");
+    image.hidden=false;image.src=source;
+  }
   document.querySelector("#viewerCounter").textContent = `${String(activePhoto + 1).padStart(2,"0")} / ${String(upfit.images.length).padStart(2,"0")}`;
   document.querySelector("#viewerDots").innerHTML = upfit.images.map((_,i)=>`<i class="${i===activePhoto?"active":""}"></i>`).join("");
   document.querySelector("#viewerYear").textContent = upfit.modelYear;
@@ -132,13 +148,19 @@ function startAttract() {
   slideshowTimer=setInterval(()=>{slideshowIndex=(slideshowIndex+1)%slides.length;renderAttract(slides)},(Number(content.slideshowSeconds)||5)*1000);
 }
 function renderAttract(slides){
-  const slide=slides[slideshowIndex%slides.length], image=document.querySelector("#attractImage");
-  image.src=slide.image;
-  image.style.animation="none";
-  requestAnimationFrame(()=>image.style.animation="");
+  const slide=slides[slideshowIndex%slides.length], image=document.querySelector("#attractImage"), video=document.querySelector("#attractVideo");
+  if(isVideo(slide.image)){
+    image.hidden=true;image.removeAttribute("src");
+    video.hidden=false;video.src=slide.image;video.currentTime=0;video.play().catch(()=>{});
+    video.style.animation="none";requestAnimationFrame(()=>video.style.animation="");
+  }else{
+    video.pause();video.hidden=true;video.removeAttribute("src");
+    image.hidden=false;image.src=slide.image;
+    image.style.animation="none";requestAnimationFrame(()=>image.style.animation="");
+  }
   document.querySelector("#attractEyebrow").textContent=slide.title.toUpperCase();
 }
-function stopAttract(){clearInterval(slideshowTimer);attract.classList.remove("visible");attract.setAttribute("aria-hidden","true");resetIdle()}
+function stopAttract(){clearInterval(slideshowTimer);document.querySelector("#attractVideo").pause();attract.classList.remove("visible");attract.setAttribute("aria-hidden","true");resetIdle()}
 function checkIdle(){
   clearTimeout(idleTimer);
   const remaining=idleDeadline-Date.now();
@@ -173,7 +195,7 @@ function updateLights(){
 async function turnLightsOff(){clearInterval(countdownTimer);secondsLeft=0;updateLights();await sendShelly(false);resetIdle()}
 async function turnLightsOn(){stopAttract();secondsLeft=lightDuration();updateLights();await sendShelly(true);clearInterval(countdownTimer);countdownTimer=setInterval(()=>{secondsLeft-=1;updateLights();if(secondsLeft<=0)turnLightsOff()},1000)}
 document.querySelector("#closeViewer").addEventListener("click",closeViewer);
-document.querySelector("#photoStage").addEventListener("click",()=>nextPhoto());
+document.querySelector("#nextMedia").addEventListener("click",()=>nextPhoto());
 document.querySelector("#photoStage").addEventListener("pointerdown",e=>swipeX=e.clientX);
 document.querySelector("#photoStage").addEventListener("pointerup",e=>{const dx=e.clientX-swipeX;if(Math.abs(dx)>70)nextPhoto(dx<0?1:-1);swipeX=0});
 document.querySelector("#exploreButton").addEventListener("click",stopAttract);

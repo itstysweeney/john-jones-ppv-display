@@ -1,6 +1,8 @@
 let content = null;
 let backendAvailable = false;
+let openUpfitIndex = null;
 const uploads = [];
+const uploadPreviews = new Map();
 
 async function load() {
   const inferredOwner = location.hostname.endsWith(".github.io") ? location.hostname.split(".")[0] : "";
@@ -69,13 +71,29 @@ function showMode() {
   message.className = "message";
 }
 
-function render() {
+function previewImage(image) {
+  return uploadPreviews.get(image) || image;
+}
+
+function isVideo(value) {
+  return /^data:video\//i.test(value) || /\.(mp4|webm|mov|m4v|ogv)(?:[?#].*)?$/i.test(value);
+}
+
+function mediaPreview(media) {
+  const source=escapeHtml(previewImage(media));
+  return isVideo(source)
+    ? `<video src="${source}" muted playsinline preload="metadata"></video><span class="video-badge">VIDEO</span>`
+    : `<img src="${source}" alt="">`;
+}
+
+function render(openIndex = openUpfitIndex) {
+  openUpfitIndex = Number.isInteger(openIndex) && content.upfits[openIndex] ? openIndex : null;
   renderShellys();
   const editor = document.querySelector("#editor");
-  editor.innerHTML = content.upfits.map((upfit,index)=>`<details class="item">
+  editor.innerHTML = content.upfits.map((upfit,index)=>`<details class="item" data-upfit-index="${index}" ${index===openUpfitIndex?"open":""}>
     <summary>
       <i class="drag-handle" data-drag-index="${index}" draggable="true" title="Drag to reorder" aria-label="Drag ${escapeHtml(upfit.title)} to reorder"><b></b><b></b><b></b></i>
-      <img src="${upfit.images[0] || "assets/tahoe.jpg"}" alt="">
+      <span class="summary-media">${mediaPreview(upfit.images[0] || "assets/tahoe.jpg")}</span>
       <span><strong>${escapeHtml(upfit.title)}</strong><small>Click to edit vehicle, details, and photos</small></span>
       <b>EDIT</b>
     </summary>
@@ -88,12 +106,17 @@ function render() {
         <label>Agency Type<input data-build-field="agencyType:${index}" value="${escapeHtml(upfit.agencyType)}" placeholder="Example: Sheriff's Office"></label>
       </div>
       <label>Upfit Description<textarea data-build-field="description:${index}" placeholder="Explain the mission, major equipment, and special features.">${escapeHtml(upfit.description)}</textarea></label>
-      <div class="photos">${upfit.images.map((image,imageIndex)=>`<div class="photo"><img src="${image}"><button data-remove="${index}:${imageIndex}">X</button></div>`).join("")}</div>
-      <label class="upload">Add Photos<input data-upload="${index}" type="file" accept="image/*" multiple></label>
+      <div class="photos">${upfit.images.map((image,imageIndex)=>`<div class="photo">${mediaPreview(image)}<button data-remove="${index}:${imageIndex}">X</button></div>`).join("")}</div>
+      <label class="upload">Add Photos or Videos<input data-upload="${index}" type="file" accept="image/*,video/*" multiple></label>
     </div>
   </details>`).join("");
   document.querySelectorAll(".item").forEach(item=>item.addEventListener("toggle",()=>{
-    if(!item.open)return;
+    const index=Number(item.dataset.upfitIndex);
+    if(!item.open){
+      if(openUpfitIndex===index)openUpfitIndex=null;
+      return;
+    }
+    openUpfitIndex=index;
     document.querySelectorAll(".item[open]").forEach(other=>{if(other!==item)other.open=false});
   }));
   enableUpfitReordering();
@@ -102,12 +125,23 @@ function render() {
     const [field,index]=input.dataset.buildField.split(":");
     content.upfits[Number(index)][field]=input.value;
   }));
-  document.querySelectorAll("[data-remove]").forEach(button=>button.addEventListener("click",()=>{const [i,j]=button.dataset.remove.split(":").map(Number);content.upfits[i].images.splice(j,1);render()}));
+  document.querySelectorAll("[data-remove]").forEach(button=>button.addEventListener("click",()=>removePhoto(...button.dataset.remove.split(":").map(Number))));
   document.querySelectorAll("[data-upload]").forEach(input=>input.addEventListener("change",()=>addFiles(Number(input.dataset.upload),input.files)));
   document.querySelectorAll("[data-remove-section]").forEach(button=>button.addEventListener("click",()=>{
-    content.upfits.splice(Number(button.dataset.removeSection),1);
+    const index=Number(button.dataset.removeSection);
+    content.upfits.splice(index,1);
+    if(openUpfitIndex===index)openUpfitIndex=null;
+    else if(openUpfitIndex>index)openUpfitIndex-=1;
     render();
   }));
+}
+
+function removePhoto(upfitIndex, imageIndex) {
+  const [removed] = content.upfits[upfitIndex].images.splice(imageIndex,1);
+  const pendingIndex = uploads.findIndex(upload => removed === `uploads/${upload.id}`);
+  if (pendingIndex >= 0) uploads.splice(pendingIndex,1);
+  uploadPreviews.delete(removed);
+  render(upfitIndex);
 }
 
 function enableUpfitReordering(){
@@ -140,6 +174,8 @@ function enableUpfitReordering(){
       if(draggedIndex<targetIndex)insertIndex-=1;
       if(insertAfter)insertIndex+=1;
       content.upfits.splice(insertIndex,0,moved);
+      if(openUpfitIndex===draggedIndex)openUpfitIndex=insertIndex;
+      else openUpfitIndex=null;
       draggedIndex=null;
       render();
       const movedRow=document.querySelectorAll(".item")[insertIndex];
@@ -164,16 +200,25 @@ function renderShellys() {
 
 async function addFiles(index, files) {
   for (const file of files) {
+    if (!file.type.startsWith("image/") && !file.type.startsWith("video/")) continue;
+    if (file.size > 24 * 1024 * 1024) {
+      const message=document.querySelector("#message");
+      message.textContent=`${file.name} is too large. Keep each video under 24 MB so Cloudflare can publish it.`;
+      message.className="message error";
+      continue;
+    }
     const data = await toDataUrl(file);
     if (backendAvailable || location.protocol !== "file:") {
       const id = `${Date.now()}-${Math.random().toString(16).slice(2)}-${file.name.replace(/[^a-zA-Z0-9._-]/g,"-")}`;
+      const imagePath = `uploads/${id}`;
       uploads.push({id,data});
-      content.upfits[index].images.push(`uploads/${id}`);
+      uploadPreviews.set(imagePath,data);
+      content.upfits[index].images.push(imagePath);
     } else {
       content.upfits[index].images.push(data);
     }
   }
-  render();
+  render(index);
 }
 
 function toDataUrl(file){return new Promise((resolve,reject)=>{const reader=new FileReader();reader.onload=()=>resolve(reader.result);reader.onerror=reject;reader.readAsDataURL(file)})}
@@ -274,7 +319,8 @@ document.querySelector("#addSection").addEventListener("click",()=>{
     description:"Describe the mission, major equipment, and special features of this upfit.",
     images:["assets/tahoe.jpg"]
   });
-  render();
+  openUpfitIndex=content.upfits.length-1;
+  render(openUpfitIndex);
   const added=document.querySelector(".item:last-child");
   if(added){added.open=true;added.scrollIntoView({behavior:"smooth",block:"center"})}
 });
