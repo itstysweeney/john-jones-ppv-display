@@ -29,8 +29,8 @@ function isVideo(value){
 }
 function cardMedia(source,title){
   return isVideo(source)
-    ? `<video src="${source}" aria-label="${title}" muted autoplay loop playsinline preload="metadata"></video>`
-    : `<img src="${source}" alt="">`;
+    ? `<span class="card-media"><video src="${source}" aria-label="${title}" muted autoplay loop playsinline preload="metadata"></video></span>`
+    : `<span class="card-media"><img src="${source}" alt=""></span>`;
 }
 
 async function loadContent() {
@@ -101,7 +101,8 @@ function renderDisplay() {
   grid.innerHTML = "";
   content.upfits.forEach((upfit, index) => {
     const button = document.createElement("button");
-    button.className = "upfit-card";
+    const titleLength=upfit.title.length;
+    button.className = `upfit-card${titleLength>25?" very-long-title":titleLength>17?" long-title":""}`;
     button.style.setProperty("--motion-delay",`${index * -0.8}s`);
     button.innerHTML = `${cardMedia(upfit.images[0]||"assets/tahoe.jpg",upfit.title)}<div><strong>${upfit.title}</strong></div>`;
     button.addEventListener("click", () => openViewer(index));
@@ -115,6 +116,13 @@ function openViewer(index) {
   viewer.classList.add("open"); viewer.setAttribute("aria-hidden","false");
 }
 function closeViewer() { document.querySelector("#viewerVideo").pause();viewer.classList.remove("open"); viewer.setAttribute("aria-hidden","true"); resetIdle(); }
+function updateViewerLayout(){
+  if(!viewer.classList.contains("open"))return;
+  const title=document.querySelector(".viewer-title").getBoundingClientRect();
+  const profile=document.querySelector(".viewer-profile").getBoundingClientRect();
+  viewer.style.setProperty("--viewer-media-top",`${Math.ceil(title.bottom)+8}px`);
+  viewer.style.setProperty("--viewer-profile-height",`${Math.ceil(profile.height)}px`);
+}
 function renderViewer() {
   const upfit = content.upfits[activeUpfit];
   const source=upfit.images[activePhoto], image=document.querySelector("#viewerImage"), video=document.querySelector("#viewerVideo");
@@ -132,6 +140,7 @@ function renderViewer() {
   document.querySelector("#viewerBuiltFor").textContent = upfit.builtFor;
   document.querySelector("#viewerAgencyType").textContent = upfit.agencyType;
   document.querySelector("#viewerDescription").textContent = upfit.description;
+  requestAnimationFrame(updateViewerLayout);
 }
 function nextPhoto(direction=1) {
   const images=content.upfits[activeUpfit].images; activePhoto=(activePhoto+direction+images.length)%images.length; renderViewer();
@@ -195,9 +204,11 @@ function updateLights(){
 async function turnLightsOff(){clearInterval(countdownTimer);secondsLeft=0;updateLights();await sendShelly(false);resetIdle()}
 async function turnLightsOn(){stopAttract();secondsLeft=lightDuration();updateLights();await sendShelly(true);clearInterval(countdownTimer);countdownTimer=setInterval(()=>{secondsLeft-=1;updateLights();if(secondsLeft<=0)turnLightsOff()},1000)}
 document.querySelector("#closeViewer").addEventListener("click",closeViewer);
-document.querySelector("#nextMedia").addEventListener("click",()=>nextPhoto());
+document.querySelector("#photoStage").addEventListener("click",()=>{if(!document.querySelector("#viewerImage").hidden)nextPhoto()});
 document.querySelector("#photoStage").addEventListener("pointerdown",e=>swipeX=e.clientX);
 document.querySelector("#photoStage").addEventListener("pointerup",e=>{const dx=e.clientX-swipeX;if(Math.abs(dx)>70)nextPhoto(dx<0?1:-1);swipeX=0});
+document.querySelector("#viewerVideo").addEventListener("ended",()=>nextPhoto());
+window.addEventListener("resize",updateViewerLayout);
 document.querySelector("#exploreButton").addEventListener("click",stopAttract);
 document.querySelector("#attractScreen").addEventListener("pointerdown",stopAttract);
 lightsButton.addEventListener("click",()=>secondsLeft>0?turnLightsOff():turnLightsOn());
