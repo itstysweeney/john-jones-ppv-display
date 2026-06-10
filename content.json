@@ -13,23 +13,9 @@
   "shellyPlugs": [],
   "upfits": [
     {
-      "title": "Dodge Chargers",
-      "images": [
-        "assets/categories/charger-1.jpg",
-        "assets/categories/charger-2.jpg",
-        "assets/categories/charger-3.jpg"
-      ],
-      "modelYear": "Model Year Varies",
-      "builtFor": "Featured Agency Build",
-      "agencyType": "Law Enforcement",
-      "description": "Agency-specific, mission-ready configuration focused on officer safety, operational efficiency, OEM compliance, and long-term serviceability."
-    },
-    {
       "title": "RAM Trucks",
       "images": [
-        "assets/categories/ram-1.jpg",
-        "assets/categories/ram-2.jpg",
-        "assets/categories/ram-3.jpg"
+        "uploads/1781110210089-bfe0efe18bb8c8-ChatGPT-Image-May-19--2026--04_23_29-PM.jpg"
       ],
       "modelYear": "Model Year Varies",
       "builtFor": "Featured Agency Build",
@@ -37,14 +23,24 @@
       "description": "Agency-specific, mission-ready configuration focused on officer safety, operational efficiency, OEM compliance, and long-term serviceability."
     },
     {
-      "title": "Chevrolet Tahoes",
+      "title": "Chevrolet Tahoe's ",
       "images": [
-        "assets/tahoe.jpg"
+        "uploads/1781110265544-260152b588f5f-IMG_2628-2.jpg",
+        "uploads/1781110265552-1c145e8c081d2-IMG_8370-2.jpg",
+        "uploads/1781110265559-e28536d515cb7-IMG_8392-2.jpg",
+        "uploads/1781110265564-99bf1fdca1d578-IMG_8398-2.jpg",
+        "uploads/1781110265570-e30dd848589c9-IMG_8399-2.jpg",
+        "uploads/1781110265576-f602932a67cb4-IMG_8403-2.jpg",
+        "uploads/1781110265584-89c0b10a67c6d8-IMG_8404-2.jpg",
+        "uploads/1781110265590-12b9356a0a62c8-IMG_8406-2.jpg",
+        "uploads/1781110265596-ac0eadb5d3a5e-IMG_8415-2.jpg",
+        "uploads/1781110265600-cf8f7b63734d08-IMG_8417-2.jpg",
+        "uploads/1781110265605-1fa7adc831739-IMG_8418-2.jpg"
       ],
-      "modelYear": "Model Year Varies",
-      "builtFor": "Featured Agency Build",
-      "agencyType": "Law Enforcement",
-      "description": "Agency-specific, mission-ready configuration focused on officer safety, operational efficiency, OEM compliance, and long-term serviceability."
+      "modelYear": "2025",
+      "builtFor": "Blackford ",
+      "agencyType": "Sheriffs Office",
+      "description": ""
     },
     {
       "title": "Dodge Durangos",
@@ -95,15 +91,16 @@
       "description": "Agency-specific, mission-ready configuration focused on officer safety, operational efficiency, OEM compliance, and long-term serviceability."
     },
     {
-      "title": "UTV",
+      "title": "Polaris Ranger Crew XD 1500",
       "images": [
-        "assets/categories/utv-1.jpg",
-        "assets/categories/utv-2.jpg"
+        "uploads/1781110469824-a4f955d4bd7948-Front-View.jpg",
+        "uploads/1781110469831-ac3bc19deb541-Polaris.jpg",
+        "uploads/1781110469839-f87f0d6d99ff6-Side-View.jpg"
       ],
-      "modelYear": "Model Year Varies",
-      "builtFor": "Featured Agency Build",
+      "modelYear": "2025",
+      "builtFor": "Patrol",
       "agencyType": "Law Enforcement",
-      "description": "Agency-specific, mission-ready configuration focused on officer safety, operational efficiency, OEM compliance, and long-term serviceability."
+      "description": "Built for demanding environments and real-world response, the 2025 Polaris Ranger Crew XD 1500 continues to be a trusted platform for public safety and emergency response agencies. This Polaris Ranger Crew XD 1500 highlight showcases a setup configured to support daily operations while remaining mission-ready for the demands of the field.\n\n "
     },
     {
       "title": "Chevrolet Silverados",
