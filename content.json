@@ -67,26 +67,15 @@
       "description": "Agency-specific, mission-ready configuration focused on officer safety, operational efficiency, OEM compliance, and long-term serviceability."
     },
     {
-      "title": "Dodge Grand Caravans",
+      "title": "Chrysler Pacifica",
       "images": [
-        "assets/categories/caravan-1.jpg",
-        "assets/categories/caravan-2.jpg",
-        "assets/categories/caravan-3.jpg"
+        "uploads/1781112073351-a50663ec624f1-IMG_6331.JPG",
+        "uploads/1781112073365-53cf47c5022738-IMG_6342.JPG",
+        "uploads/1781112073377-66eff34f6e4e8-IMG_6347.JPG",
+        "uploads/1781112073387-d3f28b825d29-IMG_6349.JPG"
       ],
       "modelYear": "Model Year Varies",
-      "builtFor": "Featured Agency Build",
-      "agencyType": "Law Enforcement",
-      "description": "Agency-specific, mission-ready configuration focused on officer safety, operational efficiency, OEM compliance, and long-term serviceability."
-    },
-    {
-      "title": "Jeep Grand Cherokee",
-      "images": [
-        "assets/categories/grand-cherokee-1.jpg",
-        "assets/categories/grand-cherokee-2.jpg",
-        "assets/categories/grand-cherokee-3.jpg"
-      ],
-      "modelYear": "Model Year Varies",
-      "builtFor": "Featured Agency Build",
+      "builtFor": "Monroe County",
       "agencyType": "Law Enforcement",
       "description": "Agency-specific, mission-ready configuration focused on officer safety, operational efficiency, OEM compliance, and long-term serviceability."
     },
@@ -108,18 +97,6 @@
         "assets/builds/rowan-1.jpg",
         "assets/builds/rowan-7.jpg",
         "assets/builds/rowan-8.jpg"
-      ],
-      "modelYear": "Model Year Varies",
-      "builtFor": "Featured Agency Build",
-      "agencyType": "Law Enforcement",
-      "description": "Agency-specific, mission-ready configuration focused on officer safety, operational efficiency, OEM compliance, and long-term serviceability."
-    },
-    {
-      "title": "Chevrolet Suburban",
-      "images": [
-        "assets/categories/suburban-1.jpg",
-        "assets/categories/suburban-2.png",
-        "assets/categories/suburban-3.jpg"
       ],
       "modelYear": "Model Year Varies",
       "builtFor": "Featured Agency Build",
