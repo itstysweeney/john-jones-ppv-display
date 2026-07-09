@@ -17,9 +17,7 @@ button{font:inherit;-webkit-tap-highlight-color:transparent;cursor:pointer}
 .topbar span{color:#85bce5;font-size:12px;font-weight:700;letter-spacing:2.5px}
 .topbar h1{margin:7px 0 0;color:var(--white);font:600 36px/1 Montserrat,Arial,sans-serif;letter-spacing:0}
 
-main{height:calc(100dvh - 282px);padding:18px 24px 22px;background:var(--deep)}
-body.hide-light-control .light-control{display:none}
-body.hide-light-control main{height:calc(100dvh - 150px)}
+main{height:calc(100dvh - 238px);padding:18px 24px 22px;background:var(--deep)}
 .grid{height:100%;display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(4,minmax(0,1fr));grid-auto-rows:minmax(300px,1fr);gap:13px;overflow-y:auto}
 .upfit-card{position:relative;min-height:0;border:5px solid #183759;background:var(--navy);padding:0;overflow:hidden;box-shadow:0 5px 16px rgba(0,0,0,.4);text-align:left;color:var(--white);animation:cardGlow 5.5s ease-in-out infinite;animation-delay:var(--motion-delay)}
 .upfit-card .card-media{position:absolute;left:0;right:0;top:0;width:100%;height:58%;overflow:hidden;background:#07152b}
@@ -34,21 +32,18 @@ body.hide-light-control main{height:calc(100dvh - 150px)}
 @keyframes cardDrift{0%{transform:scale(1.01) translate(0,0)}100%{transform:scale(1.07) translate(-1.5%,-1%)}}
 @keyframes cardGlow{0%,100%{border-color:#183759;box-shadow:0 5px 16px rgba(0,0,0,.4)}50%{border-color:#285f91;box-shadow:0 5px 20px rgba(51,122,183,.32)}}
 
-.light-control{height:132px;padding:14px 28px 16px;background:var(--panel);border-bottom:1px solid #183759;box-shadow:0 7px 20px rgba(0,0,0,.35)}
-.light-control button{width:100%;height:100%;border:2px solid var(--blue);border-left:12px solid var(--red);background:var(--navy);color:var(--white);display:grid;grid-template-columns:110px 1fr 60px;align-items:center;text-align:left;padding:0 32px}
-.light-icon{width:74px;height:32px;border:4px solid var(--white);border-radius:18px;display:flex;overflow:hidden}
-.light-icon i{flex:1}
-.light-icon i:first-child{background:var(--red)}
-.light-icon i:last-child{background:var(--blue)}
-.button-copy strong,.button-copy small{display:block}
-.button-copy strong{font:600 32px/1 Montserrat,Arial,sans-serif;letter-spacing:0}
-.button-copy small{margin-top:7px;color:var(--white);opacity:.82;font-size:11px;font-weight:700;letter-spacing:.4px}
-.button-arrow{font-size:38px;text-align:right}
-body.lights-on .light-control button{background:var(--navy)}
-body.lights-on .light-icon i:first-child{animation:redFlash .65s infinite}
-body.lights-on .light-icon i:last-child{animation:blueFlash .65s .23s infinite}
 @keyframes redFlash{0%,45%{opacity:1}46%,100%{opacity:.15}}
 @keyframes blueFlash{0%,45%{opacity:1}46%,100%{opacity:.15}}
+
+.contact-control{height:88px;padding:10px 28px;background:var(--deep)}
+.contact-control button{width:100%;height:100%;border:2px solid #85bce5;border-left:12px solid var(--blue);padding:0 24px;background:#0b2d58;color:var(--white);display:grid;grid-template-columns:1fr auto;align-items:center;text-align:left}
+.contact-control strong,.contact-control small{display:block}.contact-control strong{font:600 22px/1 Montserrat,Arial,sans-serif}.contact-control small{margin-top:5px;color:#b8d8ef;font-size:10px;font-weight:700}.contact-control b{grid-column:2;grid-row:1/3;font-size:30px}
+
+.contact-screen{display:none;position:fixed;z-index:400;inset:0;background:var(--deep);color:var(--white);overflow-y:auto}
+.contact-screen.open{display:block}.contact-screen>header{height:155px;padding:18px 30px;background:var(--deep);border-bottom:8px solid var(--blue);display:flex;align-items:center;justify-content:center}
+.contact-screen>header img{width:min(850px,82vw);height:120px;object-fit:contain}.contact-screen>header button{position:absolute;right:24px;top:34px;width:66px;height:66px;border:3px solid var(--white);background:var(--blue);color:var(--white);font-size:34px}
+.contact-heading{padding:28px 38px 20px}.contact-heading span{color:#85bce5;font-size:10px;font-weight:800;letter-spacing:2px}.contact-heading h2{margin:8px 0 10px;font:600 48px/.95 Montserrat,Arial,sans-serif}.contact-heading p{margin:0;color:#d8e2ed;font-size:13px;line-height:1.5}
+#contactForm{padding:0 38px 38px;display:grid;grid-template-columns:1fr 1fr;gap:14px}#contactForm label{display:grid;gap:7px;color:#85bce5;font-size:9px;font-weight:800;letter-spacing:1.3px;text-transform:uppercase}#contactForm input,#contactForm textarea{width:100%;border:2px solid #285f91;background:#0b2344;color:var(--white);font:inherit;font-size:17px}#contactForm input{height:58px;padding:0 14px}#contactForm textarea{padding:14px;resize:none}.contact-notes,#submitContact,#contactMessage{grid-column:1/-1}.contact-notes small{font-size:8px;color:#d8e2ed}#submitContact{height:72px;border:3px solid #85bce5;border-left:12px solid var(--red);background:var(--navy);color:var(--white);font-weight:900;letter-spacing:1px}#submitContact:disabled{opacity:.55}#contactMessage{margin:0;text-align:center;color:#d8e2ed;font-size:11px;font-weight:700}#contactMessage.error{color:#ff8795}#contactMessage.success{color:#96e5b4}.contact-honeypot{position:absolute!important;left:-9999px}
 
 .viewer{--viewer-media-top:143px;--viewer-profile-height:330px;display:none;position:fixed;z-index:200;inset:0;margin:0;padding:0;width:100vw;height:100dvh;border:0;background:var(--navy);color:var(--white);overflow:hidden}
 .viewer.open{display:block}
@@ -113,17 +108,15 @@ body.lights-on .light-icon i:last-child{animation:blueFlash .65s .23s infinite}
   .topbar img{width:270px;height:82px}
   .topbar h1{font-size:25px}
   .topbar span{font-size:8px}
-  main{height:calc(100dvh - 217px);padding:12px 14px 14px}
-  body.hide-light-control main{height:calc(100dvh - 105px)}
+  main{height:calc(100dvh - 177px);padding:12px 14px 14px}
   .grid{gap:8px}
   .upfit-card{border-width:3px}
   .upfit-card strong{font-size:15px;line-height:1}
   .upfit-card.long-title strong{font-size:13px;line-height:1}
   .upfit-card.very-long-title strong{font-size:11px;line-height:1.02}
   .upfit-card span{font-size:6px}
-  .light-control{height:112px;padding:11px 16px 13px}
-  .light-control button{grid-template-columns:85px 1fr 40px;padding:0 20px}
-  .button-copy strong{font-size:26px}
+  .contact-control{height:72px;padding:7px 16px}.contact-control button{padding:0 15px}.contact-control strong{font-size:16px}.contact-control small{font-size:8px}
+  .contact-screen>header{height:112px}.contact-screen>header img{height:85px}.contact-screen>header button{right:14px;top:24px;width:52px;height:52px;font-size:26px}.contact-heading{padding:20px 22px 14px}.contact-heading h2{font-size:34px}.contact-heading p{font-size:11px}#contactForm{padding:0 22px 24px;grid-template-columns:1fr;gap:10px}.contact-notes,#submitContact,#contactMessage{grid-column:auto}#contactForm input{height:50px;font-size:15px}#contactForm textarea{font-size:15px}#submitContact{height:62px}
   #closeViewer{right:18px;top:18px;width:58px;height:58px;font-size:32px}
   .viewer-title{padding:20px 90px 18px 20px}
   .viewer-title h2{font-size:34px;line-height:.95}

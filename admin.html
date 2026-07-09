@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="admin.css">
 </head>
 <body>
-  <header><img src="assets/ppv-black-logo.png" alt=""><div><span>DISPLAY ADMIN</span><h1>Featured Upfits Content</h1></div><a href="index.html" target="_blank">Open Display</a></header>
+  <header><img src="assets/ppv-black-logo.png" alt=""><div><span>DISPLAY ADMIN</span><h1>Featured Upfits Content</h1></div><a href="leads.html">Event Leads</a><a href="index.html" target="_blank">Open Display</a></header>
   <main>
     <section class="github-publish">
       <div>
@@ -25,27 +25,6 @@
       <label>Slideshow Heading<input id="attractHeading"></label>
       <label>Idle Before Slideshow (seconds)<input id="idleSeconds" type="number" min="5"></label>
       <label>Seconds Per Slide<input id="slideshowSeconds" type="number" min="2"></label>
-    </section>
-    <section class="light-show-settings">
-      <div>
-        <span>DISPLAY CONTROL</span>
-        <h2>Light Show Button Settings</h2>
-        <p>Customize the light-show button or hide it completely for events without physical light bars.</p>
-      </div>
-      <label class="visibility-toggle"><input id="showLightControl" type="checkbox"><span>Show light-show button on display</span></label>
-      <label>Button Title<input id="lightButtonLabel" placeholder="Activate Lights"></label>
-      <label>Button Description<input id="lightButtonDescription" placeholder="Light Bar Demo"></label>
-      <label>Demo Duration (seconds)<input id="lightDurationSeconds" type="number" min="1"></label>
-    </section>
-    <section class="shelly-setup">
-      <div>
-        <span>LIGHT BAR CONTROLLERS</span>
-        <h2>Shelly Plug Setup</h2>
-        <p>Add every Shelly Plug used at the booth. The display will activate all saved plugs together, and each plug can also be tested here.</p>
-      </div>
-      <button id="addShelly">+ Add Shelly Plug</button>
-      <button id="testLights">Test All Plugs</button>
-      <div class="shelly-list" id="shellyList"></div>
     </section>
     <div class="editor-heading"><h2>Featured Upfits</h2><button id="addSection">+ Add New Upfit</button></div>
     <section class="editor" id="editor"></section>

@@ -3,44 +3,30 @@
   "subheading": "INTERACTIVE BUILD GALLERY",
   "attractHeading": "PURPOSE BUILT FOR THE MISSION",
   "attractEyebrow": "JOHN JONES FEATURED UPFITS",
-  "idleSeconds": 15,
+  "idleSeconds": 45,
   "slideshowSeconds": 5,
-  "showLightControl": true,
-  "lightButtonLabel": "Activate Lights",
-  "lightButtonDescription": "Light Bar Demo",
-  "lightDurationSeconds": 15,
-  "shellyIp": "",
-  "shellyPlugs": [],
   "upfits": [
+    {
+      "title": "Dodge Chargers",
+      "images": [
+        "assets/categories/charger-1.jpg",
+        "assets/categories/charger-2.jpg",
+        "assets/categories/charger-3.jpg"
+      ]
+    },
     {
       "title": "RAM Trucks",
       "images": [
-        "uploads/1781110210089-bfe0efe18bb8c8-ChatGPT-Image-May-19--2026--04_23_29-PM.jpg"
-      ],
-      "modelYear": "Model Year Varies",
-      "builtFor": "Featured Agency Build",
-      "agencyType": "Law Enforcement",
-      "description": "Agency-specific, mission-ready configuration focused on officer safety, operational efficiency, OEM compliance, and long-term serviceability."
+        "assets/categories/ram-1.jpg",
+        "assets/categories/ram-2.jpg",
+        "assets/categories/ram-3.jpg"
+      ]
     },
     {
-      "title": "Chevrolet Tahoe's ",
+      "title": "Chevrolet Tahoes",
       "images": [
-        "uploads/1781110265544-260152b588f5f-IMG_2628-2.jpg",
-        "uploads/1781110265552-1c145e8c081d2-IMG_8370-2.jpg",
-        "uploads/1781110265559-e28536d515cb7-IMG_8392-2.jpg",
-        "uploads/1781110265564-99bf1fdca1d578-IMG_8398-2.jpg",
-        "uploads/1781110265570-e30dd848589c9-IMG_8399-2.jpg",
-        "uploads/1781110265576-f602932a67cb4-IMG_8403-2.jpg",
-        "uploads/1781110265584-89c0b10a67c6d8-IMG_8404-2.jpg",
-        "uploads/1781110265590-12b9356a0a62c8-IMG_8406-2.jpg",
-        "uploads/1781110265596-ac0eadb5d3a5e-IMG_8415-2.jpg",
-        "uploads/1781110265600-cf8f7b63734d08-IMG_8417-2.jpg",
-        "uploads/1781110265605-1fa7adc831739-IMG_8418-2.jpg"
-      ],
-      "modelYear": "2025",
-      "builtFor": "Blackford ",
-      "agencyType": "Sheriffs Office",
-      "description": ""
+        "assets/tahoe.jpg"
+      ]
     },
     {
       "title": "Dodge Durangos",
@@ -48,11 +34,7 @@
         "assets/categories/durango-1.jpg",
         "assets/categories/durango-2.jpg",
         "assets/categories/durango-3.jpg"
-      ],
-      "modelYear": "Model Year Varies",
-      "builtFor": "Featured Agency Build",
-      "agencyType": "Law Enforcement",
-      "description": "Agency-specific, mission-ready configuration focused on officer safety, operational efficiency, OEM compliance, and long-term serviceability."
+      ]
     },
     {
       "title": "RAM ProMasters",
@@ -60,36 +42,30 @@
         "assets/categories/promaster-1.png",
         "assets/categories/promaster-2.png",
         "assets/categories/promaster-3.png"
-      ],
-      "modelYear": "Model Year Varies",
-      "builtFor": "Featured Agency Build",
-      "agencyType": "Law Enforcement",
-      "description": "Agency-specific, mission-ready configuration focused on officer safety, operational efficiency, OEM compliance, and long-term serviceability."
+      ]
     },
     {
-      "title": "Chrysler Pacifica",
+      "title": "Dodge Grand Caravans",
       "images": [
-        "uploads/1781112073351-a50663ec624f1-IMG_6331.JPG",
-        "uploads/1781112073365-53cf47c5022738-IMG_6342.JPG",
-        "uploads/1781112073377-66eff34f6e4e8-IMG_6347.JPG",
-        "uploads/1781112073387-d3f28b825d29-IMG_6349.JPG"
-      ],
-      "modelYear": "Model Year Varies",
-      "builtFor": "Monroe County",
-      "agencyType": "Law Enforcement",
-      "description": "Agency-specific, mission-ready configuration focused on officer safety, operational efficiency, OEM compliance, and long-term serviceability."
+        "assets/categories/caravan-1.jpg",
+        "assets/categories/caravan-2.jpg",
+        "assets/categories/caravan-3.jpg"
+      ]
     },
     {
-      "title": "Polaris Ranger Crew XD 1500",
+      "title": "Jeep Grand Cherokee",
       "images": [
-        "uploads/1781110469824-a4f955d4bd7948-Front-View.jpg",
-        "uploads/1781110469831-ac3bc19deb541-Polaris.jpg",
-        "uploads/1781110469839-f87f0d6d99ff6-Side-View.jpg"
-      ],
-      "modelYear": "2025",
-      "builtFor": "Patrol",
-      "agencyType": "Law Enforcement",
-      "description": "Built for demanding environments and real-world response, the 2025 Polaris Ranger Crew XD 1500 continues to be a trusted platform for public safety and emergency response agencies. This Polaris Ranger Crew XD 1500 highlight showcases a setup configured to support daily operations while remaining mission-ready for the demands of the field.\n\n "
+        "assets/categories/grand-cherokee-1.jpg",
+        "assets/categories/grand-cherokee-2.jpg",
+        "assets/categories/grand-cherokee-3.jpg"
+      ]
+    },
+    {
+      "title": "UTV",
+      "images": [
+        "assets/categories/utv-1.jpg",
+        "assets/categories/utv-2.jpg"
+      ]
     },
     {
       "title": "Chevrolet Silverados",
@@ -97,11 +73,15 @@
         "assets/builds/rowan-1.jpg",
         "assets/builds/rowan-7.jpg",
         "assets/builds/rowan-8.jpg"
-      ],
-      "modelYear": "Model Year Varies",
-      "builtFor": "Featured Agency Build",
-      "agencyType": "Law Enforcement",
-      "description": "Agency-specific, mission-ready configuration focused on officer safety, operational efficiency, OEM compliance, and long-term serviceability."
+      ]
+    },
+    {
+      "title": "Chevrolet Suburban",
+      "images": [
+        "assets/categories/suburban-1.jpg",
+        "assets/categories/suburban-2.png",
+        "assets/categories/suburban-3.jpg"
+      ]
     },
     {
       "title": "Jeep Gladiator",
@@ -109,11 +89,7 @@
         "assets/categories/gladiator-1.png",
         "assets/categories/gladiator-2.png",
         "assets/categories/gladiator-3.png"
-      ],
-      "modelYear": "Model Year Varies",
-      "builtFor": "Featured Agency Build",
-      "agencyType": "Law Enforcement",
-      "description": "Agency-specific, mission-ready configuration focused on officer safety, operational efficiency, OEM compliance, and long-term serviceability."
+      ]
     }
   ]
 }

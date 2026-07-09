@@ -27,29 +27,10 @@ async function load() {
     } catch {}
   }
   content ||= structuredClone(window.JJ_DEFAULT_CONTENT);
-  normalizeLightShow();
-  normalizeShellys();
   normalizeUpfits();
-  ["heading","subheading","attractHeading","idleSeconds","slideshowSeconds","lightButtonLabel","lightButtonDescription","lightDurationSeconds"].forEach(key => document.querySelector(`#${key}`).value = content[key] || "");
-  document.querySelector("#showLightControl").checked = content.showLightControl;
+  ["heading","subheading","attractHeading","idleSeconds","slideshowSeconds"].forEach(key => document.querySelector(`#${key}`).value = content[key] || "");
   render();
   showMode();
-}
-
-function normalizeLightShow() {
-  content.showLightControl = content.showLightControl !== false;
-  content.lightButtonLabel ||= "Activate Lights";
-  content.lightButtonDescription ||= "Light Bar Demo";
-  content.lightDurationSeconds = Number(content.lightDurationSeconds) || 15;
-}
-
-function normalizeShellys() {
-  const legacyIp = String(content.shellyIp || "").trim();
-  if (!Array.isArray(content.shellyPlugs)) content.shellyPlugs = [];
-  content.shellyPlugs = content.shellyPlugs.map((plug,index) => typeof plug === "string"
-    ? {name:`Light Bar ${index + 1}`,ip:plug}
-    : {name:String(plug.name || `Light Bar ${index + 1}`),ip:String(plug.ip || "")});
-  if (!content.shellyPlugs.length && legacyIp) content.shellyPlugs.push({name:"Light Bar 1",ip:legacyIp});
 }
 
 function normalizeUpfits() {
@@ -88,7 +69,6 @@ function mediaPreview(media) {
 
 function render(openIndex = openUpfitIndex) {
   openUpfitIndex = Number.isInteger(openIndex) && content.upfits[openIndex] ? openIndex : null;
-  renderShellys();
   const editor = document.querySelector("#editor");
   editor.innerHTML = content.upfits.map((upfit,index)=>`<details class="item" data-upfit-index="${index}" ${index===openUpfitIndex?"open":""}>
     <summary>
@@ -185,19 +165,6 @@ function enableUpfitReordering(){
   });
 }
 
-function renderShellys() {
-  const list = document.querySelector("#shellyList");
-  if (!content.shellyPlugs.length) {
-    list.innerHTML = `<div class="shelly-empty">No Shelly plugs added yet. Add one to connect the booth light bars.</div>`;
-    return;
-  }
-  list.innerHTML = content.shellyPlugs.map((plug,index)=>`<div class="shelly-row"><label>Plug Name<input data-shelly-name="${index}" value="${escapeHtml(plug.name)}" placeholder="Example: Table Light Bar"></label><label>Local IP Address<input data-shelly-ip="${index}" value="${escapeHtml(plug.ip)}" placeholder="Example: 192.168.1.50"></label><button data-test-shelly="${index}">Test Plug</button><button class="remove-shelly" data-remove-shelly="${index}">Remove</button></div>`).join("");
-  document.querySelectorAll("[data-shelly-name]").forEach(input=>input.addEventListener("input",()=>content.shellyPlugs[Number(input.dataset.shellyName)].name=input.value));
-  document.querySelectorAll("[data-shelly-ip]").forEach(input=>input.addEventListener("input",()=>content.shellyPlugs[Number(input.dataset.shellyIp)].ip=input.value));
-  document.querySelectorAll("[data-test-shelly]").forEach(button=>button.addEventListener("click",()=>testShellys([content.shellyPlugs[Number(button.dataset.testShelly)]])));
-  document.querySelectorAll("[data-remove-shelly]").forEach(button=>button.addEventListener("click",()=>{content.shellyPlugs.splice(Number(button.dataset.removeShelly),1);renderShellys()}));
-}
-
 async function addFiles(index, files) {
   for (const file of files) {
     if (!file.type.startsWith("image/") && !file.type.startsWith("video/")) continue;
@@ -225,12 +192,9 @@ function toDataUrl(file){return new Promise((resolve,reject)=>{const reader=new 
 function escapeHtml(value){return String(value).replace(/[&<>"']/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]))}
 
 document.querySelector("#saveButton").addEventListener("click",async()=>{
-  ["heading","subheading","attractHeading","lightButtonLabel","lightButtonDescription"].forEach(key=>content[key]=document.querySelector(`#${key}`).value.trim());
-  ["idleSeconds","slideshowSeconds","lightDurationSeconds"].forEach(key=>content[key]=Number(document.querySelector(`#${key}`).value));
-  content.showLightControl = document.querySelector("#showLightControl").checked;
-  normalizeLightShow();
-  content.shellyPlugs = content.shellyPlugs.map((plug,index)=>({name:plug.name.trim() || `Light Bar ${index + 1}`,ip:cleanIp(plug.ip)})).filter(plug=>plug.ip);
-  content.shellyIp = content.shellyPlugs[0]?.ip || "";
+  ["heading","subheading","attractHeading"].forEach(key=>content[key]=document.querySelector(`#${key}`).value.trim());
+  ["idleSeconds","slideshowSeconds"].forEach(key=>content[key]=Number(document.querySelector(`#${key}`).value));
+  ["showLightControl","lightButtonLabel","lightButtonDescription","lightDurationSeconds","shellyIp","shellyPlugs"].forEach(key=>delete content[key]);
   const message=document.querySelector("#message");message.textContent="Saving...";message.className="message";
   try {
     localStorage.setItem("jj-display-content", JSON.stringify(content));
@@ -324,29 +288,5 @@ document.querySelector("#addSection").addEventListener("click",()=>{
   const added=document.querySelector(".item:last-child");
   if(added){added.open=true;added.scrollIntoView({behavior:"smooth",block:"center"})}
 });
-
-document.querySelector("#addShelly").addEventListener("click",()=>{
-  content.shellyPlugs.push({name:`Light Bar ${content.shellyPlugs.length + 1}`,ip:""});
-  renderShellys();
-  document.querySelector(".shelly-row:last-child input")?.focus();
-});
-
-function cleanIp(value){return String(value || "").trim().replace(/^https?:\/\//,"").replace(/\/+$/,"")}
-
-async function testShellys(plugs){
-  const message=document.querySelector("#message");
-  const duration=Math.max(1,Number(document.querySelector("#lightDurationSeconds").value)||15);
-  const ready=plugs.map(plug=>({...plug,ip:cleanIp(plug.ip)})).filter(plug=>plug.ip);
-  if(!ready.length){message.textContent="Add an IP address to at least one Shelly Plug first.";message.className="message error";return}
-  message.textContent=`Sending a ${duration} second demo to ${ready.length} Shelly plug${ready.length===1?"":"s"}...`;message.className="message";
-  const results=await Promise.allSettled(ready.map(plug=>fetch(`http://${plug.ip}/rpc/Switch.Set?id=0&on=true&toggle_after=${duration}`,{mode:"no-cors",cache:"no-store"})));
-  const sent=results.filter(result=>result.status==="fulfilled").length;
-  message.textContent=sent===ready.length
-    ? `Test command sent to ${sent} plug${sent===1?"":"s"}. They will automatically turn off after ${duration} seconds.`
-    : `Command sent to ${sent} of ${ready.length} plugs. Confirm each plug is powered on and connected to the same network.`;
-  message.className=sent===ready.length?"message success":"message error";
-}
-
-document.querySelector("#testLights").addEventListener("click",()=>testShellys(content.shellyPlugs));
 
 load();

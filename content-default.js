@@ -5,12 +5,6 @@ window.JJ_DEFAULT_CONTENT = {
   attractEyebrow: "JOHN JONES FEATURED UPFITS",
   idleSeconds: 45,
   slideshowSeconds: 5,
-  showLightControl: true,
-  lightButtonLabel: "Activate Lights",
-  lightButtonDescription: "Light Bar Demo",
-  lightDurationSeconds: 15,
-  shellyIp: "",
-  shellyPlugs: [],
   upfits: [
     {title:"Dodge Chargers",images:["assets/categories/charger-1.jpg","assets/categories/charger-2.jpg","assets/categories/charger-3.jpg"]},
     {title:"RAM Trucks",images:["assets/categories/ram-1.jpg","assets/categories/ram-2.jpg","assets/categories/ram-3.jpg"]},

@@ -1,8 +1,7 @@
 const DEFAULT_CONTENT = window.JJ_DEFAULT_CONTENT || {
   heading: "FEATURED UPFITS", subheading: "INTERACTIVE BUILD GALLERY",
   attractHeading: "PURPOSE BUILT FOR THE MISSION", attractEyebrow: "JOHN JONES FEATURED UPFITS",
-  idleSeconds: 45, slideshowSeconds: 5, showLightControl: true, lightButtonLabel: "Activate Lights",
-  lightButtonDescription: "Light Bar Demo", lightDurationSeconds: 15, shellyPlugs: [],
+  idleSeconds: 45, slideshowSeconds: 5,
   upfits: [
     {title:"Dodge Chargers",images:["assets/categories/charger-1.jpg","assets/categories/charger-2.jpg","assets/categories/charger-3.jpg"]},
     {title:"RAM Trucks",images:["assets/categories/ram-1.jpg","assets/categories/ram-2.jpg","assets/categories/ram-3.jpg"]},
@@ -19,10 +18,10 @@ const DEFAULT_CONTENT = window.JJ_DEFAULT_CONTENT || {
 };
 
 let content = DEFAULT_CONTENT, activeUpfit = 0, activePhoto = 0, swipeX = 0;
-let idleTimer = null, idleDeadline = 0, slideshowTimer = null, slideshowIndex = 0, countdownTimer = null, secondsLeft = 0;
+let idleTimer = null, idleDeadline = 0, slideshowTimer = null, slideshowIndex = 0;
 let contentSignature = "";
 const grid = document.querySelector("#upfitGrid"), viewer = document.querySelector("#viewer"), attract = document.querySelector("#attractScreen");
-const settings = window.JJ_LIGHTS || {}, lightsButton = document.querySelector("#lightsButton");
+const contactScreen = document.querySelector("#contactScreen");
 
 function isVideo(value){
   return /^data:video\//i.test(value||"")||/\.(mp4|webm|mov|m4v|ogv)(?:[?#].*)?$/i.test(value||"");
@@ -81,9 +80,6 @@ async function checkForContentUpdates() {
   } catch {}
 }
 function normalizeUpfits(){
-  content.showLightControl = content.showLightControl !== false;
-  content.lightButtonLabel ||= "Activate Lights";
-  content.lightButtonDescription ||= "Light Bar Demo";
   content.upfits = Array.isArray(content.upfits) ? content.upfits : [];
   content.upfits.forEach(upfit=>{
     upfit.images = Array.isArray(upfit.images) ? upfit.images : [];
@@ -94,7 +90,6 @@ function normalizeUpfits(){
   });
 }
 function renderDisplay() {
-  document.body.classList.toggle("hide-light-control", !content.showLightControl);
   document.querySelector(".topbar span").textContent = content.subheading;
   document.querySelector(".topbar h1").textContent = content.heading;
   document.querySelector("#attractTitle").textContent = content.attractHeading;
@@ -108,7 +103,6 @@ function renderDisplay() {
     button.addEventListener("click", () => openViewer(index));
     grid.appendChild(button);
   });
-  updateLights();
   resetIdle();
 }
 function openViewer(index) {
@@ -147,7 +141,7 @@ function nextPhoto(direction=1) {
 }
 function allSlides() { return content.upfits.flatMap(upfit=>upfit.images.map(image=>({image,title:upfit.title}))); }
 function startAttract() {
-  if (secondsLeft>0) return;
+  if (contactScreen.classList.contains("open")) return;
   viewer.classList.remove("open");
   viewer.setAttribute("aria-hidden","true");
   activeUpfit=0;
@@ -180,29 +174,6 @@ function resetIdle(){
   idleDeadline=Date.now()+(Number(content.idleSeconds)||45)*1000;
   checkIdle();
 }
-function lightDuration(){return Number(content.lightDurationSeconds)||Number(settings.durationSeconds)||15}
-function cleanShellyAddress(value){return String(value||"").trim().replace(/^https?:\/\//,"").replace(/\/+$/,"")}
-function shellyAddresses(){
-  const configured=Array.isArray(content.shellyPlugs)?content.shellyPlugs.map(plug=>cleanShellyAddress(typeof plug==="string"?plug:plug.ip)).filter(Boolean):[];
-  if(configured.length)return [...new Set(configured)];
-  const fallback=Array.isArray(settings.shellyPlugs)?settings.shellyPlugs.map(plug=>cleanShellyAddress(typeof plug==="string"?plug:plug.ip)).filter(Boolean):[];
-  const legacy=cleanShellyAddress(content.shellyIp||settings.shellyIp);
-  return [...new Set([...fallback,...(legacy?[legacy]:[])])];
-}
-async function sendShelly(on){
-  const addresses=shellyAddresses();if(!addresses.length)return false;
-  const extra=on?`&toggle_after=${lightDuration()}`:"";
-  const results=await Promise.allSettled(addresses.map(ip=>fetch(`http://${ip}/rpc/Switch.Set?id=0&on=${on}${extra}`,{mode:"no-cors",cache:"no-store"})));
-  return results.some(result=>result.status==="fulfilled");
-}
-function updateLights(){
-  const on=secondsLeft>0;document.body.classList.toggle("lights-on",on);
-  document.querySelector("#lightsLabel").textContent=on?`LIGHTS ON - ${String(secondsLeft).padStart(2,"0")}s`:content.lightButtonLabel.toUpperCase();
-  document.querySelector("#lightsStatus").textContent=on?"Tap to turn off now":`${content.lightButtonDescription.toUpperCase()} - automatic ${lightDuration()} second shutoff`;
-  document.querySelector(".button-arrow").textContent=on?"X":">";
-}
-async function turnLightsOff(){clearInterval(countdownTimer);secondsLeft=0;updateLights();await sendShelly(false);resetIdle()}
-async function turnLightsOn(){stopAttract();secondsLeft=lightDuration();updateLights();await sendShelly(true);clearInterval(countdownTimer);countdownTimer=setInterval(()=>{secondsLeft-=1;updateLights();if(secondsLeft<=0)turnLightsOff()},1000)}
 document.querySelector("#closeViewer").addEventListener("click",closeViewer);
 document.querySelector("#photoStage").addEventListener("click",()=>{if(!document.querySelector("#viewerImage").hidden)nextPhoto()});
 document.querySelector("#photoStage").addEventListener("pointerdown",e=>swipeX=e.clientX);
@@ -211,9 +182,57 @@ document.querySelector("#viewerVideo").addEventListener("ended",()=>nextPhoto())
 window.addEventListener("resize",updateViewerLayout);
 document.querySelector("#exploreButton").addEventListener("click",stopAttract);
 document.querySelector("#attractScreen").addEventListener("pointerdown",stopAttract);
-lightsButton.addEventListener("click",()=>secondsLeft>0?turnLightsOff():turnLightsOn());
 document.addEventListener("pointerdown",e=>{if(!e.target.closest("#attractScreen"))resetIdle()});
 document.addEventListener("keydown",resetIdle);
 document.addEventListener("visibilitychange",()=>{if(!document.hidden)checkIdle()});
 setInterval(()=>{if(idleDeadline>0&&!attract.classList.contains("visible")&&Date.now()>=idleDeadline)startAttract()},1000);
+
+function openContact(){
+  stopAttract();
+  clearTimeout(idleTimer);
+  idleDeadline=0;
+  contactScreen.classList.add("open");
+  contactScreen.setAttribute("aria-hidden","false");
+  document.querySelector("#contactForm input[name=name]").focus();
+}
+function closeContact(){
+  contactScreen.classList.remove("open");
+  contactScreen.setAttribute("aria-hidden","true");
+  resetIdle();
+}
+function queuedLeads(){
+  try{return JSON.parse(localStorage.getItem("jj-pending-leads")||"[]")}catch{return[]}
+}
+function saveQueuedLeads(leads){localStorage.setItem("jj-pending-leads",JSON.stringify(leads))}
+async function sendLead(lead){
+  const response=await fetch("api/leads",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(lead)});
+  if(!response.ok)throw new Error();
+}
+async function retryQueuedLeads(){
+  const queued=queuedLeads();
+  if(!queued.length)return;
+  const remaining=[];
+  for(const lead of queued){try{await sendLead(lead)}catch{remaining.push(lead)}}
+  saveQueuedLeads(remaining);
+}
+document.querySelector("#contactButton").addEventListener("click",openContact);
+document.querySelector("#closeContact").addEventListener("click",closeContact);
+document.querySelector("#contactForm").addEventListener("submit",async event=>{
+  event.preventDefault();
+  const form=event.currentTarget, data=new FormData(form), message=document.querySelector("#contactMessage"), submit=document.querySelector("#submitContact");
+  const lead={name:data.get("name"),department:data.get("department"),phone:data.get("phone"),email:data.get("email"),description:data.get("description"),website:data.get("website"),source:"PPV Interactive Event Display"};
+  if(!String(lead.phone).trim()&&!String(lead.email).trim()){message.textContent="Please include a phone number or email address.";message.className="error";return}
+  submit.disabled=true;message.textContent="Sending your information...";message.className="";
+  try{
+    await sendLead(lead);
+    message.textContent="Thank you. Our team received your information.";
+  }catch{
+    const queued=queuedLeads();queued.push(lead);saveQueuedLeads(queued);
+    message.textContent="Thank you. Your information is saved and will send automatically.";
+  }
+  message.className="success";form.reset();submit.disabled=false;
+  setTimeout(closeContact,2800);
+});
+setInterval(retryQueuedLeads,30000);
+window.addEventListener("online",retryQueuedLeads);
 loadContent();
