@@ -4,6 +4,10 @@ let openUpfitIndex = null;
 const uploads = [];
 const uploadPreviews = new Map();
 
+function contentVersionMatches(value){
+  return !window.JJ_DEFAULT_CONTENT?.contentVersion || value?.contentVersion === window.JJ_DEFAULT_CONTENT.contentVersion;
+}
+
 async function load() {
   const inferredOwner = location.hostname.endsWith(".github.io") ? location.hostname.split(".")[0] : "";
   const inferredRepo = location.hostname.endsWith(".github.io") ? location.pathname.split("/").filter(Boolean)[0] || "" : "";
@@ -11,7 +15,11 @@ async function load() {
   document.querySelector("#githubRepo").value = sessionStorage.getItem("jj-github-repo") || inferredRepo || "john-jones-ppv-display";
   try {
     const saved = localStorage.getItem("jj-display-content");
-    if (saved) content = JSON.parse(saved);
+    if (saved) {
+      const savedContent = JSON.parse(saved);
+      if (contentVersionMatches(savedContent)) content = savedContent;
+      else localStorage.removeItem("jj-display-content");
+    }
   } catch {}
   try {
     const response = await fetch("/api/content", {cache:"no-store"});

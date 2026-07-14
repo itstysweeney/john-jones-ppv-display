@@ -1,20 +1,9 @@
 const DEFAULT_CONTENT = window.JJ_DEFAULT_CONTENT || {
+  contentVersion: "featured-upfits-2026-07-09",
   heading: "FEATURED UPFITS", subheading: "INTERACTIVE BUILD GALLERY",
   attractHeading: "PURPOSE BUILT FOR THE MISSION", attractEyebrow: "JOHN JONES FEATURED UPFITS",
   idleSeconds: 45, slideshowSeconds: 5,
-  upfits: [
-    {title:"Dodge Chargers",images:["assets/categories/charger-1.jpg","assets/categories/charger-2.jpg","assets/categories/charger-3.jpg"]},
-    {title:"RAM Trucks",images:["assets/categories/ram-1.jpg","assets/categories/ram-2.jpg","assets/categories/ram-3.jpg"]},
-    {title:"Chevrolet Tahoes",images:["assets/tahoe.jpg"]},
-    {title:"Dodge Durangos",images:["assets/categories/durango-1.jpg","assets/categories/durango-2.jpg","assets/categories/durango-3.jpg"]},
-    {title:"RAM ProMasters",images:["assets/categories/promaster-1.png","assets/categories/promaster-2.png","assets/categories/promaster-3.png"]},
-    {title:"Dodge Grand Caravans",images:["assets/categories/caravan-1.jpg","assets/categories/caravan-2.jpg","assets/categories/caravan-3.jpg"]},
-    {title:"Jeep Grand Cherokee",images:["assets/categories/grand-cherokee-1.jpg","assets/categories/grand-cherokee-2.jpg","assets/categories/grand-cherokee-3.jpg"]},
-    {title:"UTV",images:["assets/categories/utv-1.jpg","assets/categories/utv-2.jpg"]},
-    {title:"Chevrolet Silverados",images:["assets/builds/rowan-1.jpg","assets/builds/rowan-7.jpg","assets/builds/rowan-8.jpg"]},
-    {title:"Chevrolet Suburban",images:["assets/categories/suburban-1.jpg","assets/categories/suburban-2.png","assets/categories/suburban-3.jpg"]},
-    {title:"Jeep Gladiator",images:["assets/categories/gladiator-1.png","assets/categories/gladiator-2.png","assets/categories/gladiator-3.png"]}
-  ]
+  upfits: []
 };
 
 let content = DEFAULT_CONTENT, activeUpfit = 0, activePhoto = 0, swipeX = 0;
@@ -22,6 +11,10 @@ let idleTimer = null, idleDeadline = 0, slideshowTimer = null, slideshowIndex = 
 let contentSignature = "";
 const grid = document.querySelector("#upfitGrid"), viewer = document.querySelector("#viewer"), attract = document.querySelector("#attractScreen");
 const contactScreen = document.querySelector("#contactScreen");
+
+function contentVersionMatches(value){
+  return !DEFAULT_CONTENT.contentVersion || value?.contentVersion === DEFAULT_CONTENT.contentVersion;
+}
 
 function isVideo(value){
   return /^data:video\//i.test(value||"")||/\.(mp4|webm|mov|m4v|ogv)(?:[?#].*)?$/i.test(value||"");
@@ -38,8 +31,13 @@ async function loadContent() {
     try {
       const saved = localStorage.getItem("jj-display-content");
       if (saved) {
-        content = JSON.parse(saved);
-        loaded = true;
+        const savedContent = JSON.parse(saved);
+        if (contentVersionMatches(savedContent)) {
+          content = savedContent;
+          loaded = true;
+        } else {
+          localStorage.removeItem("jj-display-content");
+        }
       }
     } catch {}
   }
@@ -191,48 +189,16 @@ function openContact(){
   stopAttract();
   clearTimeout(idleTimer);
   idleDeadline=0;
+  const frame=document.querySelector("#websiteContactFrame");
+  if(frame&&!frame.src)frame.src=frame.dataset.src;
   contactScreen.classList.add("open");
   contactScreen.setAttribute("aria-hidden","false");
-  document.querySelector("#contactForm input[name=name]").focus();
 }
 function closeContact(){
   contactScreen.classList.remove("open");
   contactScreen.setAttribute("aria-hidden","true");
   resetIdle();
 }
-function queuedLeads(){
-  try{return JSON.parse(localStorage.getItem("jj-pending-leads")||"[]")}catch{return[]}
-}
-function saveQueuedLeads(leads){localStorage.setItem("jj-pending-leads",JSON.stringify(leads))}
-async function sendLead(lead){
-  const response=await fetch("api/leads",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(lead)});
-  if(!response.ok)throw new Error();
-}
-async function retryQueuedLeads(){
-  const queued=queuedLeads();
-  if(!queued.length)return;
-  const remaining=[];
-  for(const lead of queued){try{await sendLead(lead)}catch{remaining.push(lead)}}
-  saveQueuedLeads(remaining);
-}
 document.querySelector("#contactButton").addEventListener("click",openContact);
 document.querySelector("#closeContact").addEventListener("click",closeContact);
-document.querySelector("#contactForm").addEventListener("submit",async event=>{
-  event.preventDefault();
-  const form=event.currentTarget, data=new FormData(form), message=document.querySelector("#contactMessage"), submit=document.querySelector("#submitContact");
-  const lead={name:data.get("name"),department:data.get("department"),phone:data.get("phone"),email:data.get("email"),description:data.get("description"),website:data.get("website"),source:"PPV Interactive Event Display"};
-  if(!String(lead.phone).trim()&&!String(lead.email).trim()){message.textContent="Please include a phone number or email address.";message.className="error";return}
-  submit.disabled=true;message.textContent="Sending your information...";message.className="";
-  try{
-    await sendLead(lead);
-    message.textContent="Thank you. Our team received your information.";
-  }catch{
-    const queued=queuedLeads();queued.push(lead);saveQueuedLeads(queued);
-    message.textContent="Thank you. Your information is saved and will send automatically.";
-  }
-  message.className="success";form.reset();submit.disabled=false;
-  setTimeout(closeContact,2800);
-});
-setInterval(retryQueuedLeads,30000);
-window.addEventListener("online",retryQueuedLeads);
 loadContent();

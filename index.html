@@ -61,17 +61,15 @@
 
   <section class="contact-screen" id="contactScreen" aria-hidden="true">
     <header><img src="assets/ppv-white-full-logo.png" alt="John Jones Police Pursuit Vehicles"><button id="closeContact" aria-label="Close contact form">X</button></header>
-    <div class="contact-heading"><span>LET'S BUILD SOMETHING</span><h2>CONTACT OUR TEAM</h2><p>Tell us who you are and what your department needs. Our team will follow up after the event.</p></div>
-    <form id="contactForm">
-      <label>Name<input name="name" required autocomplete="name"></label>
-      <label>Department / Agency<input name="department" required autocomplete="organization"></label>
-      <label>Phone Number<input name="phone" type="tel" autocomplete="tel" inputmode="tel"></label>
-      <label>Email Address<input name="email" type="email" autocomplete="email" inputmode="email"></label>
-      <label class="contact-notes">What are you looking for? <small>Optional - leave blank if you prefer</small><textarea name="description" rows="5"></textarea></label>
-      <input class="contact-honeypot" name="website" tabindex="-1" autocomplete="off">
-      <button type="submit" id="submitContact">SEND TO OUR TEAM</button>
-      <p id="contactMessage">Please include a phone number or email address.</p>
-    </form>
+    <div class="contact-heading"><span>OFFICIAL WEBSITE FORM</span><h2>CONTACT OUR TEAM</h2><p>This keeps you inside the interactive display while using the real John Jones Police Pursuit Vehicles contact form.</p></div>
+    <div class="website-form-shell">
+      <div class="website-form-toolbar">
+        <strong>POLICEPURSUITVEHICLES.COM CONTACT FORM</strong>
+        <a href="https://www.policepursuitvehicles.com/contact-us/" target="_blank" rel="noopener">OPEN FULL FORM</a>
+      </div>
+      <iframe id="websiteContactFrame" title="John Jones Police Pursuit Vehicles contact form" data-src="https://www.policepursuitvehicles.com/contact-us/"></iframe>
+      <p>Form submissions are handled by the official website.</p>
+    </div>
   </section>
 
   <script src="config.js"></script>
