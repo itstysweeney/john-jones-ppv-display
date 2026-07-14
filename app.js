@@ -1,5 +1,5 @@
 const DEFAULT_CONTENT = window.JJ_DEFAULT_CONTENT || {
-  contentVersion: "featured-upfits-2026-07-09",
+  contentVersion: "featured-upfits-2026-07-14",
   heading: "FEATURED UPFITS", subheading: "INTERACTIVE BUILD GALLERY",
   attractHeading: "PURPOSE BUILT FOR THE MISSION", attractEyebrow: "JOHN JONES FEATURED UPFITS",
   idleSeconds: 45, slideshowSeconds: 5,
@@ -7,7 +7,7 @@ const DEFAULT_CONTENT = window.JJ_DEFAULT_CONTENT || {
 };
 
 let content = DEFAULT_CONTENT, activeUpfit = 0, activePhoto = 0, swipeX = 0;
-let idleTimer = null, idleDeadline = 0, slideshowTimer = null, slideshowIndex = 0;
+let idleTimer = null, idleDeadline = 0, slideshowTimer = null, slideshowIndex = 0, attractWakeGuardUntil = 0;
 let contentSignature = "";
 const grid = document.querySelector("#upfitGrid"), viewer = document.querySelector("#viewer"), attract = document.querySelector("#attractScreen");
 const contactScreen = document.querySelector("#contactScreen");
@@ -98,7 +98,10 @@ function renderDisplay() {
     button.className = `upfit-card${titleLength>25?" very-long-title":titleLength>17?" long-title":""}`;
     button.style.setProperty("--motion-delay",`${index * -0.8}s`);
     button.innerHTML = `${cardMedia(upfit.images[0]||"assets/tahoe.jpg",upfit.title)}<div><strong>${upfit.title}</strong></div>`;
-    button.addEventListener("click", () => openViewer(index));
+    button.addEventListener("click", () => {
+      if (Date.now() < attractWakeGuardUntil) return;
+      openViewer(index);
+    });
     grid.appendChild(button);
   });
   resetIdle();
@@ -140,11 +143,13 @@ function nextPhoto(direction=1) {
 function allSlides() { return content.upfits.flatMap(upfit=>upfit.images.map(image=>({image,title:upfit.title}))); }
 function startAttract() {
   if (contactScreen.classList.contains("open")) return;
+  document.querySelector("#viewerVideo").pause();
   viewer.classList.remove("open");
   viewer.setAttribute("aria-hidden","true");
   activeUpfit=0;
   activePhoto=0;
   clearInterval(slideshowTimer); const slides=allSlides(); if(!slides.length)return;
+  document.body.classList.add("attract-mode");
   renderAttract(slides); attract.classList.add("visible"); attract.setAttribute("aria-hidden","false");
   slideshowTimer=setInterval(()=>{slideshowIndex=(slideshowIndex+1)%slides.length;renderAttract(slides)},(Number(content.slideshowSeconds)||5)*1000);
 }
@@ -161,7 +166,25 @@ function renderAttract(slides){
   }
   document.querySelector("#attractEyebrow").textContent=slide.title.toUpperCase();
 }
-function stopAttract(){clearInterval(slideshowTimer);document.querySelector("#attractVideo").pause();attract.classList.remove("visible");attract.setAttribute("aria-hidden","true");resetIdle()}
+function stopAttract(){clearInterval(slideshowTimer);document.querySelector("#attractVideo").pause();attract.classList.remove("visible");attract.setAttribute("aria-hidden","true");document.body.classList.remove("attract-mode");resetIdle()}
+function wakeFromAttract(event){
+  event?.preventDefault();
+  event?.stopPropagation();
+  attractWakeGuardUntil=Date.now()+450;
+  stopAttract();
+}
+function showStartScreen(event){
+  event?.preventDefault();
+  event?.stopPropagation();
+  document.querySelector("#viewerVideo").pause();
+  viewer.classList.remove("open");
+  viewer.setAttribute("aria-hidden","true");
+  contactScreen.classList.remove("open");
+  contactScreen.setAttribute("aria-hidden","true");
+  clearTimeout(idleTimer);
+  idleDeadline=0;
+  startAttract();
+}
 function checkIdle(){
   clearTimeout(idleTimer);
   const remaining=idleDeadline-Date.now();
@@ -178,8 +201,9 @@ document.querySelector("#photoStage").addEventListener("pointerdown",e=>swipeX=e
 document.querySelector("#photoStage").addEventListener("pointerup",e=>{const dx=e.clientX-swipeX;if(Math.abs(dx)>70)nextPhoto(dx<0?1:-1);swipeX=0});
 document.querySelector("#viewerVideo").addEventListener("ended",()=>nextPhoto());
 window.addEventListener("resize",updateViewerLayout);
-document.querySelector("#exploreButton").addEventListener("click",stopAttract);
-document.querySelector("#attractScreen").addEventListener("pointerdown",stopAttract);
+document.querySelector("#exploreButton").addEventListener("click",wakeFromAttract);
+document.querySelector("#attractScreen").addEventListener("click",wakeFromAttract);
+document.querySelector("#showStartScreen").addEventListener("click",showStartScreen);
 document.addEventListener("pointerdown",e=>{if(!e.target.closest("#attractScreen"))resetIdle()});
 document.addEventListener("keydown",resetIdle);
 document.addEventListener("visibilitychange",()=>{if(!document.hidden)checkIdle()});
