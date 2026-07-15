@@ -1,5 +1,5 @@
 window.JJ_DEFAULT_CONTENT = {
-  "contentVersion": "featured-upfits-2026-07-09",
+  "contentVersion": "featured-upfits-2026-07-14",
   "heading": "FEATURED UPFITS",
   "subheading": "INTERACTIVE BUILD GALLERY",
   "attractHeading": "PURPOSE BUILT FOR THE MISSION",
@@ -57,7 +57,6 @@ window.JJ_DEFAULT_CONTENT = {
       "sourceUrl": "https://www.policepursuitvehicles.com/chevrolet-silverado-upfit-delivery-rowan-county-sheriffs-office/",
       "description": "A 2025 Chevrolet Silverado with Police Package built for Rowan County Sheriff?s Office in Kentucky, with patrol-ready lighting, secure storage, prisoner transport equipment, and field-focused utility.",
       "images": [
-        "https://di-uploads-pod47.dealerinspire.com/johnjonespolicevehicles/uploads/2026/02/IMG_5455-1024x768.jpg",
         "https://di-uploads-pod47.dealerinspire.com/johnjonespolicevehicles/uploads/2026/06/IMG_9676.jpg",
         "https://di-uploads-pod47.dealerinspire.com/johnjonespolicevehicles/uploads/2026/06/IMG_9679.jpg",
         "https://di-uploads-pod47.dealerinspire.com/johnjonespolicevehicles/uploads/2026/06/IMG_9686.jpg",

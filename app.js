@@ -15,6 +15,14 @@ const contactScreen = document.querySelector("#contactScreen");
 function contentVersionMatches(value){
   return !DEFAULT_CONTENT.contentVersion || value?.contentVersion === DEFAULT_CONTENT.contentVersion;
 }
+function hasUsableContent(value){
+  return Array.isArray(value?.upfits) && value.upfits.length > 0;
+}
+function setLoadedContent(value){
+  if (!hasUsableContent(value)) return false;
+  content = value;
+  return true;
+}
 
 function isVideo(value){
   return /^data:video\//i.test(value||"")||/\.(mp4|webm|mov|m4v|ogv)(?:[?#].*)?$/i.test(value||"");
@@ -32,8 +40,7 @@ async function loadContent() {
       const saved = localStorage.getItem("jj-display-content");
       if (saved) {
         const savedContent = JSON.parse(saved);
-        if (contentVersionMatches(savedContent)) {
-          content = savedContent;
+        if (contentVersionMatches(savedContent) && setLoadedContent(savedContent)) {
           loaded = true;
         } else {
           localStorage.removeItem("jj-display-content");
@@ -45,7 +52,7 @@ async function loadContent() {
     try {
       const response = await fetch("api/content", {cache:"no-store"});
       if (!response.ok) throw new Error();
-      content = await response.json();
+      if (!setLoadedContent(await response.json())) throw new Error();
       loaded = true;
     } catch {}
   }
@@ -53,10 +60,13 @@ async function loadContent() {
     try {
       const response = await fetch(`content.json?updated=${Date.now()}`, {cache:"no-store"});
       if (response.ok) {
-        content = await response.json();
+        setLoadedContent(await response.json());
         loaded = true;
       }
     } catch {}
+  }
+  if (!hasUsableContent(content) && hasUsableContent(DEFAULT_CONTENT)) {
+    content = JSON.parse(JSON.stringify(DEFAULT_CONTENT));
   }
   normalizeUpfits();
   contentSignature = JSON.stringify(content);
@@ -68,6 +78,7 @@ async function checkForContentUpdates() {
     const response = await fetch(`content.json?updated=${Date.now()}`, {cache:"no-store"});
     if (!response.ok) return;
     const next = await response.json(), signature = JSON.stringify(next);
+    if (!hasUsableContent(next)) return;
     if (signature === contentSignature) return;
     content = next;
     normalizeUpfits();
