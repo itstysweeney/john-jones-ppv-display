@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
   <meta name="theme-color" content="#003a8f">
   <title>John Jones Featured Upfits</title>
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="styles.css?v=20260716-kiosk">
 </head>
 <body>
   <header class="topbar">
@@ -62,19 +62,28 @@
 
   <section class="contact-screen" id="contactScreen" aria-hidden="true">
     <header><img src="assets/ppv-white-full-logo.png" alt="John Jones Police Pursuit Vehicles"><button id="closeContact" aria-label="Close contact form">X</button></header>
-    <div class="contact-heading"><span>OFFICIAL WEBSITE FORM</span><h2>CONTACT OUR TEAM</h2><p>This keeps you inside the interactive display while using the real John Jones Police Pursuit Vehicles contact form.</p></div>
+    <div class="contact-heading"><span>OFFICIAL WEBSITE FORM</span><h2>CONTACT OUR TEAM</h2><p>Use the official John Jones Police Pursuit Vehicles contact form below.</p></div>
     <div class="website-form-shell">
       <div class="website-form-toolbar">
         <strong>POLICEPURSUITVEHICLES.COM CONTACT FORM</strong>
-        <a href="https://www.policepursuitvehicles.com/contact-us/" target="_blank" rel="noopener">OPEN FULL FORM</a>
+        <a href="https://www.policepursuitvehicles.com/contact-us/">OPEN DIRECT</a>
+      </div>
+      <div class="contact-direct-strip">
+        <span>If the kiosk says Website Not Available, open the official form full screen.</span>
+        <a href="https://www.policepursuitvehicles.com/contact-us/">OPEN OFFICIAL FORM</a>
       </div>
       <iframe id="websiteContactFrame" title="John Jones Police Pursuit Vehicles contact form" data-src="https://www.policepursuitvehicles.com/contact-us/"></iframe>
-      <p>Form submissions are handled by the official website.</p>
+      <div class="contact-fallback" id="contactFallback" hidden>
+        <strong>FORM NOT SHOWING?</strong>
+        <span>Open the official contact form directly.</span>
+        <a href="https://www.policepursuitvehicles.com/contact-us/">OPEN OFFICIAL FORM</a>
+      </div>
+      <p>Form submissions are handled by the official website. If the kiosk does not show the form, tap Open Direct.</p>
     </div>
   </section>
 
-  <script src="config.js"></script>
-  <script src="content-default.js"></script>
-  <script src="app.js"></script>
+  <script src="config.js?v=20260716-kiosk"></script>
+  <script src="content-default.js?v=20260716-kiosk"></script>
+  <script src="app.js?v=20260716-kiosk"></script>
 </body>
 </html>

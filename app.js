@@ -1,5 +1,5 @@
 const DEFAULT_CONTENT = window.JJ_DEFAULT_CONTENT || {
-  contentVersion: "featured-upfits-2026-07-14",
+  contentVersion: "featured-upfits-2026-07-15",
   heading: "FEATURED UPFITS", subheading: "INTERACTIVE BUILD GALLERY",
   attractHeading: "PURPOSE BUILT FOR THE MISSION", attractEyebrow: "JOHN JONES FEATURED UPFITS",
   idleSeconds: 45, slideshowSeconds: 5,
@@ -7,7 +7,7 @@ const DEFAULT_CONTENT = window.JJ_DEFAULT_CONTENT || {
 };
 
 let content = DEFAULT_CONTENT, activeUpfit = 0, activePhoto = 0, swipeX = 0;
-let idleTimer = null, idleDeadline = 0, slideshowTimer = null, slideshowIndex = 0, attractWakeGuardUntil = 0;
+let idleTimer = null, idleDeadline = 0, slideshowTimer = null, slideshowIndex = 0, attractWakeGuardUntil = 0, contactLoadTimer = null;
 let contentSignature = "";
 const grid = document.querySelector("#upfitGrid"), viewer = document.querySelector("#viewer"), attract = document.querySelector("#attractScreen");
 const contactScreen = document.querySelector("#contactScreen");
@@ -103,6 +103,10 @@ function renderDisplay() {
   document.querySelector(".topbar h1").textContent = content.heading;
   document.querySelector("#attractTitle").textContent = content.attractHeading;
   grid.innerHTML = "";
+  const gridColumns = 3;
+  const gridRows = Math.max(3, Math.ceil(content.upfits.length / gridColumns));
+  grid.style.gridTemplateRows = `repeat(${gridRows}, minmax(0, 1fr))`;
+  grid.style.gridAutoRows = "minmax(0, 1fr)";
   content.upfits.forEach((upfit, index) => {
     const button = document.createElement("button");
     const titleLength=upfit.title.length;
@@ -220,20 +224,30 @@ document.addEventListener("keydown",resetIdle);
 document.addEventListener("visibilitychange",()=>{if(!document.hidden)checkIdle()});
 setInterval(()=>{if(idleDeadline>0&&!attract.classList.contains("visible")&&Date.now()>=idleDeadline)startAttract()},1000);
 
+function showContactFallback(visible){
+  const fallback=document.querySelector("#contactFallback");
+  if(fallback)fallback.hidden=!visible;
+}
 function openContact(){
   stopAttract();
   clearTimeout(idleTimer);
+  clearTimeout(contactLoadTimer);
   idleDeadline=0;
   const frame=document.querySelector("#websiteContactFrame");
+  showContactFallback(false);
   if(frame&&!frame.src)frame.src=frame.dataset.src;
+  contactLoadTimer=setTimeout(()=>{if(contactScreen.classList.contains("open"))showContactFallback(true)},6500);
   contactScreen.classList.add("open");
   contactScreen.setAttribute("aria-hidden","false");
 }
 function closeContact(){
+  clearTimeout(contactLoadTimer);
+  showContactFallback(false);
   contactScreen.classList.remove("open");
   contactScreen.setAttribute("aria-hidden","true");
   resetIdle();
 }
 document.querySelector("#contactButton").addEventListener("click",openContact);
 document.querySelector("#closeContact").addEventListener("click",closeContact);
+document.querySelector("#websiteContactFrame").addEventListener("load",()=>{clearTimeout(contactLoadTimer);showContactFallback(false)});
 loadContent();
