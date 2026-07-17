@@ -1,5 +1,5 @@
 window.JJ_DEFAULT_CONTENT = {
-  "contentVersion": "featured-upfits-2026-07-14",
+  "contentVersion": "featured-upfits-2026-07-16-photo-order",
   "heading": "FEATURED UPFITS",
   "subheading": "INTERACTIVE BUILD GALLERY",
   "attractHeading": "PURPOSE BUILT FOR THE MISSION",
@@ -50,12 +50,12 @@ window.JJ_DEFAULT_CONTENT = {
       ]
     },
     {
-      "title": "Chevrolet Silverado Upfit Delivery: Rowan County Sheriff?s Office",
+      "title": "Chevrolet Silverado Upfit Delivery: Rowan County Sheriff's Office",
       "modelYear": "2025",
-      "builtFor": "Rowan County Sheriff?s Office",
+      "builtFor": "Rowan County Sheriff's Office",
       "agencyType": "Patrol",
       "sourceUrl": "https://www.policepursuitvehicles.com/chevrolet-silverado-upfit-delivery-rowan-county-sheriffs-office/",
-      "description": "A 2025 Chevrolet Silverado with Police Package built for Rowan County Sheriff?s Office in Kentucky, with patrol-ready lighting, secure storage, prisoner transport equipment, and field-focused utility.",
+      "description": "A 2025 Chevrolet Silverado with Police Package built for Rowan County Sheriff's Office in Kentucky, with patrol-ready lighting, secure storage, prisoner transport equipment, and field-focused utility.",
       "images": [
         "https://di-uploads-pod47.dealerinspire.com/johnjonespolicevehicles/uploads/2026/06/IMG_9676.jpg",
         "https://di-uploads-pod47.dealerinspire.com/johnjonespolicevehicles/uploads/2026/06/IMG_9679.jpg",
@@ -169,6 +169,52 @@ window.JJ_DEFAULT_CONTENT = {
         "https://di-uploads-pod47.dealerinspire.com/johnjonespolicevehicles/uploads/2026/02/IMG_5969.jpg",
         "https://di-uploads-pod47.dealerinspire.com/johnjonespolicevehicles/uploads/2026/02/IMG_5973.jpg",
         "https://di-uploads-pod47.dealerinspire.com/johnjonespolicevehicles/uploads/2026/02/IMG_5945-1.jpg"
+      ]
+    },
+    {
+      "title": "RAM 1500 Classic Upfit: Evansville Police Department",
+      "modelYear": "2024",
+      "builtFor": "Evansville Police Department",
+      "agencyType": "Patrol / K-9",
+      "sourceUrl": "https://www.policepursuitvehicles.com/ram-1500-classic-upfit-evansville-police-department/",
+      "description": "A 2024 RAM 1500 Classic upfit for Evansville Police Department in Evansville, Indiana, configured for patrol operations with department-specific equipment placement, emergency lighting, and field-ready utility.",
+      "images": [
+        "https://di-uploads-pod47.dealerinspire.com/johnjonespolicevehicles/uploads/2026/02/IMG_5625.jpg",
+        "https://di-uploads-pod47.dealerinspire.com/johnjonespolicevehicles/uploads/2026/02/IMG_5630-edit-1024x768.jpg",
+        "https://di-uploads-pod47.dealerinspire.com/johnjonespolicevehicles/uploads/2026/02/IMG_5641.jpg",
+        "https://di-uploads-pod47.dealerinspire.com/johnjonespolicevehicles/uploads/2026/02/IMG_5609.jpg",
+        "https://di-uploads-pod47.dealerinspire.com/johnjonespolicevehicles/uploads/2026/02/IMG_5613.jpg",
+        "https://di-uploads-pod47.dealerinspire.com/johnjonespolicevehicles/uploads/2026/02/IMG_5617-edit.jpg",
+        "https://di-uploads-pod47.dealerinspire.com/johnjonespolicevehicles/uploads/2026/02/IMG_5632.jpg",
+        "https://di-uploads-pod47.dealerinspire.com/johnjonespolicevehicles/uploads/2026/02/IMG_5633.jpg"
+      ]
+    },
+    {
+      "title": "Chevrolet Tahoe Upfit Delivery: Jeffersontown Fire Department",
+      "modelYear": "2026",
+      "builtFor": "Jeffersontown Fire Department",
+      "agencyType": "Fire Command",
+      "sourceUrl": "https://www.policepursuitvehicles.com/chevrolet-tahoe-upfit-delivery-jeffersontown-fire-department/",
+      "description": "A Chevrolet Tahoe fire department upfit for Jeffersontown Fire Department, built as a command-focused public safety vehicle with emergency-response equipment, lighting, and practical storage for field operations.",
+      "images": [
+        "https://di-uploads-pod47.dealerinspire.com/johnjonespolicevehicles/uploads/2026/02/IMG_6033-1024x768.jpg"
+      ]
+    },
+    {
+      "title": "Chevrolet Tahoe Upfit Delivery: New Albany Township Fire Department",
+      "modelYear": "2026",
+      "builtFor": "New Albany Township Fire Department",
+      "agencyType": "Fire Command",
+      "sourceUrl": "https://www.policepursuitvehicles.com/chevrolet-tahoe-upfit-delivery-new-albany-township-fire-department/",
+      "description": "A 2026 Chevrolet Tahoe LT command upfit for New Albany Township Fire Department in New Albany, Indiana, configured around emergency response, equipment accessibility, and department-specific operational needs.",
+      "images": [
+        "https://di-uploads-pod47.dealerinspire.com/johnjonespolicevehicles/uploads/2026/05/IMG_7800-2-1024x819.jpg",
+        "https://di-uploads-pod47.dealerinspire.com/johnjonespolicevehicles/uploads/2026/05/IMG_7815-2.jpg",
+        "https://di-uploads-pod47.dealerinspire.com/johnjonespolicevehicles/uploads/2026/05/IMG_7817.jpg",
+        "https://di-uploads-pod47.dealerinspire.com/johnjonespolicevehicles/uploads/2026/05/IMG_7816-2.jpg",
+        "https://di-uploads-pod47.dealerinspire.com/johnjonespolicevehicles/uploads/2026/05/IMG_7827-2.jpg",
+        "https://di-uploads-pod47.dealerinspire.com/johnjonespolicevehicles/uploads/2026/05/IMG_7830.jpg",
+        "https://di-uploads-pod47.dealerinspire.com/johnjonespolicevehicles/uploads/2026/05/IMG_7819-2.jpg"
       ]
     }
   ]

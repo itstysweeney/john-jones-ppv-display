@@ -1,5 +1,5 @@
 const DEFAULT_CONTENT = window.JJ_DEFAULT_CONTENT || {
-  contentVersion: "featured-upfits-2026-07-15",
+  contentVersion: "featured-upfits-2026-07-16-photo-order",
   heading: "FEATURED UPFITS", subheading: "INTERACTIVE BUILD GALLERY",
   attractHeading: "PURPOSE BUILT FOR THE MISSION", attractEyebrow: "JOHN JONES FEATURED UPFITS",
   idleSeconds: 45, slideshowSeconds: 5,
@@ -7,10 +7,13 @@ const DEFAULT_CONTENT = window.JJ_DEFAULT_CONTENT || {
 };
 
 let content = DEFAULT_CONTENT, activeUpfit = 0, activePhoto = 0, swipeX = 0;
-let idleTimer = null, idleDeadline = 0, slideshowTimer = null, slideshowIndex = 0, attractWakeGuardUntil = 0, contactLoadTimer = null;
+let idleTimer = null, idleDeadline = 0, slideshowTimer = null, slideshowIndex = 0, attractWakeGuardUntil = 0;
 let contentSignature = "";
 const grid = document.querySelector("#upfitGrid"), viewer = document.querySelector("#viewer"), attract = document.querySelector("#attractScreen");
 const contactScreen = document.querySelector("#contactScreen");
+const LEADS_ENDPOINT = window.JJ_DISPLAY_CONFIG?.leadsEndpoint || "api/leads";
+const LOCAL_LEADS_KEY = "jj-event-leads";
+const PENDING_LEADS_KEY = "jj-pending-leads";
 
 function contentVersionMatches(value){
   return !DEFAULT_CONTENT.contentVersion || value?.contentVersion === DEFAULT_CONTENT.contentVersion;
@@ -224,30 +227,93 @@ document.addEventListener("keydown",resetIdle);
 document.addEventListener("visibilitychange",()=>{if(!document.hidden)checkIdle()});
 setInterval(()=>{if(idleDeadline>0&&!attract.classList.contains("visible")&&Date.now()>=idleDeadline)startAttract()},1000);
 
-function showContactFallback(visible){
-  const fallback=document.querySelector("#contactFallback");
-  if(fallback)fallback.hidden=!visible;
-}
 function openContact(){
   stopAttract();
   clearTimeout(idleTimer);
-  clearTimeout(contactLoadTimer);
   idleDeadline=0;
-  const frame=document.querySelector("#websiteContactFrame");
-  showContactFallback(false);
-  if(frame&&!frame.src)frame.src=frame.dataset.src;
-  contactLoadTimer=setTimeout(()=>{if(contactScreen.classList.contains("open"))showContactFallback(true)},6500);
   contactScreen.classList.add("open");
   contactScreen.setAttribute("aria-hidden","false");
+  document.querySelector("#contactMessage").textContent="Ready when you are.";
+  document.querySelector("#contactMessage").className="contact-message";
 }
 function closeContact(){
-  clearTimeout(contactLoadTimer);
-  showContactFallback(false);
   contactScreen.classList.remove("open");
   contactScreen.setAttribute("aria-hidden","true");
   resetIdle();
 }
+function storedList(key){
+  try{return JSON.parse(localStorage.getItem(key)||"[]")}catch{return[]}
+}
+function saveStoredList(key,value){
+  localStorage.setItem(key,JSON.stringify(value));
+}
+function setContactMessage(text,type=""){
+  const message=document.querySelector("#contactMessage");
+  message.textContent=text;
+  message.className=`contact-message${type?` ${type}`:""}`;
+}
+function leadFromForm(form){
+  const data=new FormData(form);
+  return {
+    name:String(data.get("name")||"").trim(),
+    department:String(data.get("department")||"").trim(),
+    phone:String(data.get("phone")||"").trim(),
+    email:String(data.get("email")||"").trim(),
+    description:String(data.get("description")||"").trim(),
+    website:String(data.get("website")||"").trim(),
+    source:"PPV event kiosk"
+  };
+}
+async function sendLead(lead){
+  const response=await fetch(LEADS_ENDPOINT,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(lead)});
+  const body=await response.json().catch(()=>({}));
+  if(!response.ok||body.ok===false)throw new Error(body.error||"Lead storage is not connected yet.");
+  return body;
+}
+function storeLead(lead,pending=true){
+  const id=(window.crypto&&crypto.randomUUID)?crypto.randomUUID():`${Date.now()}-${Math.round(Math.random()*100000)}`;
+  const saved={...lead,id,created_at:new Date().toISOString()};
+  saveStoredList(LOCAL_LEADS_KEY,[saved,...storedList(LOCAL_LEADS_KEY)]);
+  if(pending)saveStoredList(PENDING_LEADS_KEY,[saved,...storedList(PENDING_LEADS_KEY)]);
+}
+async function submitContact(event){
+  event.preventDefault();
+  resetIdle();
+  const form=event.currentTarget, button=form.querySelector("button");
+  const lead=leadFromForm(form);
+  if(!lead.name||!lead.department||(!lead.phone&&!lead.email)){
+    setContactMessage("Please enter name, department, and either phone or email.","error");
+    return;
+  }
+  button.disabled=true;
+  setContactMessage("Submitting contact...");
+  try{
+    await sendLead(lead);
+    storeLead(lead,false);
+    form.reset();
+    setContactMessage("Submitted. Our team will follow up after the event.","success");
+  }catch(error){
+    storeLead(lead,true);
+    form.reset();
+    setContactMessage("Saved on this kiosk. It will send automatically when lead storage is connected.","success");
+  }finally{
+    button.disabled=false;
+  }
+}
+async function retryPendingLeads(){
+  const pending=storedList(PENDING_LEADS_KEY);
+  if(!pending.length)return;
+  const remaining=[];
+  for(const lead of pending){
+    try{await sendLead(lead)}
+    catch{remaining.push(lead)}
+  }
+  saveStoredList(PENDING_LEADS_KEY,remaining);
+}
 document.querySelector("#contactButton").addEventListener("click",openContact);
 document.querySelector("#closeContact").addEventListener("click",closeContact);
-document.querySelector("#websiteContactFrame").addEventListener("load",()=>{clearTimeout(contactLoadTimer);showContactFallback(false)});
+document.querySelector("#contactForm").addEventListener("submit",submitContact);
+window.addEventListener("online",retryPendingLeads);
+setInterval(retryPendingLeads,60000);
 loadContent();
+retryPendingLeads();
