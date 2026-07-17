@@ -11,6 +11,7 @@ let idleTimer = null, idleDeadline = 0, slideshowTimer = null, slideshowIndex = 
 let contentSignature = "";
 const grid = document.querySelector("#upfitGrid"), viewer = document.querySelector("#viewer"), attract = document.querySelector("#attractScreen");
 const contactScreen = document.querySelector("#contactScreen");
+const OFFICIAL_CONTACT_URL = "https://www.policepursuitvehicles.com/contact-us/";
 const LEADS_ENDPOINT = window.JJ_DISPLAY_CONFIG?.leadsEndpoint || "api/leads";
 const LOCAL_LEADS_KEY = "jj-event-leads";
 const PENDING_LEADS_KEY = "jj-pending-leads";
@@ -231,10 +232,10 @@ function openContact(){
   stopAttract();
   clearTimeout(idleTimer);
   idleDeadline=0;
+  const frame=document.querySelector("#websiteContactFrame");
+  if(frame&&!frame.src)frame.src=OFFICIAL_CONTACT_URL;
   contactScreen.classList.add("open");
   contactScreen.setAttribute("aria-hidden","false");
-  document.querySelector("#contactMessage").textContent="Ready when you are.";
-  document.querySelector("#contactMessage").className="contact-message";
 }
 function closeContact(){
   contactScreen.classList.remove("open");
@@ -312,7 +313,12 @@ async function retryPendingLeads(){
 }
 document.querySelector("#contactButton").addEventListener("click",openContact);
 document.querySelector("#closeContact").addEventListener("click",closeContact);
-document.querySelector("#contactForm").addEventListener("submit",submitContact);
+document.querySelector("#contactBackButton").addEventListener("click",closeContact);
+document.querySelector("#reloadContact").addEventListener("click",()=>{
+  const frame=document.querySelector("#websiteContactFrame");
+  if(frame)frame.src=OFFICIAL_CONTACT_URL;
+});
+document.querySelector("#contactForm")?.addEventListener("submit",submitContact);
 window.addEventListener("online",retryPendingLeads);
 setInterval(retryPendingLeads,60000);
 loadContent();
