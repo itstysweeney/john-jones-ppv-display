@@ -233,8 +233,6 @@ function openContact(){
   stopAttract();
   clearTimeout(idleTimer);
   idleDeadline=0;
-  const frame=document.querySelector("#websiteContactFrame");
-  if(frame&&(!frame.getAttribute("src")||frame.getAttribute("src")==="about:blank"))frame.src=frame.dataset.src||OFFICIAL_CONTACT_URL;
   contactScreen.classList.add("open");
   contactScreen.setAttribute("aria-hidden","false");
 }
@@ -393,6 +391,6 @@ document.querySelector("#reloadContact").addEventListener("click",()=>{
   const frame=document.querySelector("#websiteContactFrame");
   if(!frame)return;
   frame.src="about:blank";
-  requestAnimationFrame(()=>{frame.src=frame.dataset.src||OFFICIAL_CONTACT_URL});
+  requestAnimationFrame(()=>{frame.src=OFFICIAL_CONTACT_URL});
 });
 loadContent();
