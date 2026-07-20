@@ -8,6 +8,7 @@ const DEFAULT_CONTENT = window.JJ_DEFAULT_CONTENT || {
 
 let content = DEFAULT_CONTENT, activeUpfit = 0, activePhoto = 0, swipeX = 0;
 let idleTimer = null, idleDeadline = 0, slideshowTimer = null, slideshowIndex = 0, attractWakeGuardUntil = 0;
+let contactSubmitTimer = null;
 let contentSignature = "";
 const grid = document.querySelector("#upfitGrid"), viewer = document.querySelector("#viewer"), attract = document.querySelector("#attractScreen");
 const contactScreen = document.querySelector("#contactScreen");
@@ -233,7 +234,7 @@ function openContact(){
   clearTimeout(idleTimer);
   idleDeadline=0;
   const frame=document.querySelector("#websiteContactFrame");
-  if(frame&&!frame.src)frame.src=OFFICIAL_CONTACT_URL;
+  if(frame&&(!frame.getAttribute("src")||frame.getAttribute("src")==="about:blank"))frame.src=frame.dataset.src||OFFICIAL_CONTACT_URL;
   contactScreen.classList.add("open");
   contactScreen.setAttribute("aria-hidden","false");
 }
@@ -248,10 +249,66 @@ function storedList(key){
 function saveStoredList(key,value){
   localStorage.setItem(key,JSON.stringify(value));
 }
+function updateStoredLead(key,lead){
+  const list=storedList(key);
+  const index=list.findIndex(item=>item.id===lead.id);
+  if(index>=0)list[index]={...list[index],...lead};
+  else list.unshift(lead);
+  saveStoredList(key,list);
+}
+function storePendingLead(lead){
+  saveStoredList(PENDING_LEADS_KEY,[lead,...storedList(PENDING_LEADS_KEY).filter(item=>item.id!==lead.id)]);
+}
+function removePendingLead(id){
+  saveStoredList(PENDING_LEADS_KEY,storedList(PENDING_LEADS_KEY).filter(item=>item.id!==id));
+}
 function setContactMessage(text,type=""){
   const message=document.querySelector("#contactMessage");
+  if(!message)return;
   message.textContent=text;
   message.className=`contact-message${type?` ${type}`:""}`;
+}
+function officialLeadFromForm(form){
+  const data=new FormData(form);
+  const firstName=String(data.get("input_1")||"").trim();
+  const lastName=String(data.get("input_2")||"").trim();
+  return {
+    name:`${firstName} ${lastName}`.trim(),
+    first_name:firstName,
+    last_name:lastName,
+    department:String(data.get("lead_department")||"").trim(),
+    phone:String(data.get("input_1338")||"").trim(),
+    email:String(data.get("input_3")||"").trim(),
+    extension:String(data.get("input_1340")||"").trim(),
+    description:String(data.get("lead_notes")||"").trim(),
+    source:"PPV event kiosk",
+    website_status:"Website form submit attempted",
+    backup_status:"Saved locally before website submit"
+  };
+}
+function prepareOfficialContact(event){
+  resetIdle();
+  const form=event.currentTarget;
+  const lead=officialLeadFromForm(form);
+  const hiddenMessage=form.querySelector("#officialContactMessage");
+  hiddenMessage.value=[
+    `Department / Agency: ${lead.department||"Not provided"}`,
+    "",
+    lead.description ? `Message: ${lead.description}` : "Message: Contact request from PPV event kiosk."
+  ].join("\n");
+  let savedBackup=false;
+  let savedLead=lead;
+  try{
+    savedLead=storeLead(lead,false);
+    savedBackup=true;
+  }catch(error){}
+  if(savedBackup)saveOnlineBackup(savedLead);
+  setContactMessage(savedBackup ? "Saved to kiosk backup. Sending to the website and online backup..." : "Sending to the website form, but local backup could not be saved.","");
+  clearTimeout(contactSubmitTimer);
+  contactSubmitTimer=setTimeout(()=>{
+    setContactMessage(savedBackup ? "Saved to backup and sent to the website form. Online backup will show on any computer once connected." : "Website form sent. Please write this lead down because backup did not save.","success");
+    form.reset();
+  },2500);
 }
 function leadFromForm(form){
   const data=new FormData(form);
@@ -272,10 +329,25 @@ async function sendLead(lead){
   return body;
 }
 function storeLead(lead,pending=true){
-  const id=(window.crypto&&crypto.randomUUID)?crypto.randomUUID():`${Date.now()}-${Math.round(Math.random()*100000)}`;
-  const saved={...lead,id,created_at:new Date().toISOString()};
-  saveStoredList(LOCAL_LEADS_KEY,[saved,...storedList(LOCAL_LEADS_KEY)]);
-  if(pending)saveStoredList(PENDING_LEADS_KEY,[saved,...storedList(PENDING_LEADS_KEY)]);
+  const id=lead.id||((window.crypto&&crypto.randomUUID)?crypto.randomUUID():`${Date.now()}-${Math.round(Math.random()*100000)}`);
+  const saved={...lead,id,created_at:lead.created_at||new Date().toISOString()};
+  saveStoredList(LOCAL_LEADS_KEY,[saved,...storedList(LOCAL_LEADS_KEY).filter(item=>item.id!==id)]);
+  if(pending)storePendingLead(saved);
+  return saved;
+}
+async function saveOnlineBackup(lead){
+  const queued={...lead,online_status:"Saving to online backup"};
+  updateStoredLead(LOCAL_LEADS_KEY,queued);
+  try{
+    await sendLead(queued);
+    const saved={...queued,online_status:"Saved to online backup"};
+    updateStoredLead(LOCAL_LEADS_KEY,saved);
+    removePendingLead(saved.id);
+  }catch(error){
+    const pending={...queued,online_status:"Online backup pending",online_error:error.message};
+    updateStoredLead(LOCAL_LEADS_KEY,pending);
+    storePendingLead(pending);
+  }
 }
 async function submitContact(event){
   event.preventDefault();
@@ -306,7 +378,10 @@ async function retryPendingLeads(){
   if(!pending.length)return;
   const remaining=[];
   for(const lead of pending){
-    try{await sendLead(lead)}
+    try{
+      await sendLead(lead);
+      updateStoredLead(LOCAL_LEADS_KEY,{...lead,online_status:"Saved to online backup"});
+    }
     catch{remaining.push(lead)}
   }
   saveStoredList(PENDING_LEADS_KEY,remaining);
@@ -316,10 +391,8 @@ document.querySelector("#closeContact").addEventListener("click",closeContact);
 document.querySelector("#contactBackButton").addEventListener("click",closeContact);
 document.querySelector("#reloadContact").addEventListener("click",()=>{
   const frame=document.querySelector("#websiteContactFrame");
-  if(frame)frame.src=OFFICIAL_CONTACT_URL;
+  if(!frame)return;
+  frame.src="about:blank";
+  requestAnimationFrame(()=>{frame.src=frame.dataset.src||OFFICIAL_CONTACT_URL});
 });
-document.querySelector("#contactForm")?.addEventListener("submit",submitContact);
-window.addEventListener("online",retryPendingLeads);
-setInterval(retryPendingLeads,60000);
 loadContent();
-retryPendingLeads();
