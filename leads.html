@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>John Jones Event Leads</title>
+  <link rel="stylesheet" href="leads.css?v=20260721-email-leads-back">
+</head>
+<body>
+  <header>
+    <img src="assets/ppv-black-logo.png" alt="">
+    <div><span>DISPLAY ADMIN</span><h1>Event Leads Dashboard</h1></div>
+    <a href="admin.html">Content Admin</a>
+    <a class="back-display" href="index.html">Back to Display</a>
+  </header>
+  <main>
+    <section class="lead-access">
+      <div>
+        <span>VIDEO BOARD LEADS</span>
+        <h2>After-Show Follow-Up List</h2>
+        <p>Leads are saved on this board/browser. At the end of the show, email, share, copy, or export the list.</p>
+      </div>
+      <label>Email To
+        <input id="emailTo" type="email" value="tsweeney@gmcity.com" placeholder="your@email.com" autocomplete="email">
+      </label>
+    </section>
+
+    <section class="lead-toolbar">
+      <strong id="leadCount">0 LEADS</strong>
+      <div>
+        <button id="refreshLeads">REFRESH</button>
+        <button id="emailLeads">EMAIL SUMMARY</button>
+        <button id="shareLeads">SHARE CSV</button>
+        <button id="copyLeads">COPY LIST</button>
+        <button id="exportLeads">DOWNLOAD CSV</button>
+      </div>
+    </section>
+
+    <p id="leadMessage">Loading event leads...</p>
+    <section id="leadList" class="lead-list"></section>
+
+    <section class="danger-zone">
+      <div><span>CLEAR AFTER EXPORT</span><p>Only clear the board after you have emailed or exported the leads.</p></div>
+      <button id="clearLeads">CLEAR ALL LEADS</button>
+    </section>
+  </main>
+  <script src="leads.js?v=20260721-email-leads-back"></script>
+</body>
+</html>

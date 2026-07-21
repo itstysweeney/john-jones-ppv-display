@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
   <meta name="theme-color" content="#003a8f">
   <title>John Jones Featured Upfits</title>
-  <link rel="stylesheet" href="styles.css?v=20260720-static-contact-iframe">
+  <link rel="stylesheet" href="styles.css?v=20260721-delivery-highlights">
 </head>
 <body>
   <header class="topbar">
@@ -15,7 +15,7 @@
   </header>
 
   <section class="contact-control">
-    <button id="contactButton"><strong>CONTACT OUR TEAM</strong><small>Open the official PPV contact form</small><b>&gt;</b></button>
+    <button id="contactButton"><strong>CONTACT OUR TEAM</strong><small>Save an event lead for follow-up</small><b>&gt;</b></button>
   </section>
 
   <main><section class="grid" id="upfitGrid" aria-label="Featured upfit categories"></section></main>
@@ -62,19 +62,34 @@
 
   <section class="contact-screen" id="contactScreen" aria-hidden="true">
     <header><img src="assets/ppv-white-full-logo.png" alt="John Jones Police Pursuit Vehicles"><button id="closeContact" aria-label="Close contact form">X</button></header>
-    <div class="contact-heading"><span>OFFICIAL WEBSITE</span><h2>CONTACT OUR TEAM</h2><p>Fill out the PPV website form below.</p></div>
-    <div class="website-form-shell iframe-shell">
+    <div class="contact-heading"><span>EVENT LEAD FORM</span><h2>CONTACT OUR TEAM</h2><p>Share your information and our team will follow up after the event.</p></div>
+    <div class="website-form-shell">
       <div class="website-form-toolbar">
-        <strong>POLICEPURSUITVEHICLES.COM/CONTACT-US</strong>
-        <button id="reloadContact" type="button">RELOAD</button>
+        <strong>EVENT CONTACT REQUEST</strong>
       </div>
-      <iframe id="websiteContactFrame" class="website-contact-frame" src="https://www.policepursuitvehicles.com/contact-us/" title="PPV contact page"></iframe>
+      <form class="contact-form" id="eventLeadForm">
+        <div class="contact-two">
+          <label>First Name <input name="firstName" autocomplete="given-name" required></label>
+          <label>Last Name <input name="lastName" autocomplete="family-name" required></label>
+        </div>
+        <label>Department / Agency <input name="department" autocomplete="organization" required></label>
+        <div class="contact-two">
+          <label>Email <input name="email" type="email" autocomplete="email" required></label>
+          <label>Phone <input name="phone" type="tel" autocomplete="tel" required></label>
+        </div>
+        <label>Extension <input name="extension" autocomplete="off"></label>
+        <label>What are you looking for? <textarea name="description" rows="4" placeholder="Optional"></textarea></label>
+        <input name="website" class="bot-field" tabindex="-1" autocomplete="off">
+        <button type="submit">SAVE LEAD</button>
+        <p class="contact-message" id="contactMessage">Ready when you are.</p>
+      </form>
       <button id="contactBackButton" type="button">BACK TO UPFITS</button>
     </div>
+    <a class="contact-admin-link" href="leads.html" aria-label="Event leads dashboard">LEADS</a>
   </section>
 
-  <script src="config.js?v=20260720-static-contact-iframe"></script>
-  <script src="content-default.js?v=20260720-static-contact-iframe"></script>
-  <script src="app.js?v=20260720-static-contact-iframe"></script>
+  <script src="config.js?v=20260721-delivery-highlights"></script>
+  <script src="content-default.js?v=20260721-delivery-highlights"></script>
+  <script src="app.js?v=20260721-delivery-highlights"></script>
 </body>
 </html>

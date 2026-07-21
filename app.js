@@ -12,10 +12,9 @@ let contactSubmitTimer = null;
 let contentSignature = "";
 const grid = document.querySelector("#upfitGrid"), viewer = document.querySelector("#viewer"), attract = document.querySelector("#attractScreen");
 const contactScreen = document.querySelector("#contactScreen");
-const OFFICIAL_CONTACT_URL = "https://www.policepursuitvehicles.com/contact-us/";
-const LEADS_ENDPOINT = window.JJ_DISPLAY_CONFIG?.leadsEndpoint || "api/leads";
 const LOCAL_LEADS_KEY = "jj-event-leads";
-const PENDING_LEADS_KEY = "jj-pending-leads";
+const LEAD_EMAIL_TO = "tsweeney@gmcity.com";
+const LEAD_EMAIL_ENDPOINT = `https://formsubmit.co/ajax/${LEAD_EMAIL_TO}`;
 
 function contentVersionMatches(value){
   return !DEFAULT_CONTENT.contentVersion || value?.contentVersion === DEFAULT_CONTENT.contentVersion;
@@ -162,7 +161,12 @@ function nextPhoto(direction=1) {
 }
 function allSlides() { return content.upfits.flatMap(upfit=>upfit.images.map(image=>({image,title:upfit.title}))); }
 function startAttract() {
-  if (contactScreen.classList.contains("open")) return;
+  if (contactScreen.classList.contains("open")) {
+    contactScreen.classList.remove("open");
+    contactScreen.setAttribute("aria-hidden","true");
+    document.querySelector("#eventLeadForm")?.reset();
+    setContactMessage("Ready when you are.");
+  }
   document.querySelector("#viewerVideo").pause();
   viewer.classList.remove("open");
   viewer.setAttribute("aria-hidden","true");
@@ -233,8 +237,10 @@ function openContact(){
   stopAttract();
   clearTimeout(idleTimer);
   idleDeadline=0;
+  setContactMessage("Ready when you are.");
   contactScreen.classList.add("open");
   contactScreen.setAttribute("aria-hidden","false");
+  resetIdle();
 }
 function closeContact(){
   contactScreen.classList.remove("open");
@@ -247,150 +253,107 @@ function storedList(key){
 function saveStoredList(key,value){
   localStorage.setItem(key,JSON.stringify(value));
 }
-function updateStoredLead(key,lead){
-  const list=storedList(key);
-  const index=list.findIndex(item=>item.id===lead.id);
-  if(index>=0)list[index]={...list[index],...lead};
-  else list.unshift(lead);
-  saveStoredList(key,list);
-}
-function storePendingLead(lead){
-  saveStoredList(PENDING_LEADS_KEY,[lead,...storedList(PENDING_LEADS_KEY).filter(item=>item.id!==lead.id)]);
-}
-function removePendingLead(id){
-  saveStoredList(PENDING_LEADS_KEY,storedList(PENDING_LEADS_KEY).filter(item=>item.id!==id));
-}
 function setContactMessage(text,type=""){
   const message=document.querySelector("#contactMessage");
   if(!message)return;
   message.textContent=text;
   message.className=`contact-message${type?` ${type}`:""}`;
 }
-function officialLeadFromForm(form){
+function eventLeadFromForm(form){
   const data=new FormData(form);
-  const firstName=String(data.get("input_1")||"").trim();
-  const lastName=String(data.get("input_2")||"").trim();
+  const firstName=String(data.get("firstName")||"").trim();
+  const lastName=String(data.get("lastName")||"").trim();
   return {
     name:`${firstName} ${lastName}`.trim(),
     first_name:firstName,
     last_name:lastName,
-    department:String(data.get("lead_department")||"").trim(),
-    phone:String(data.get("input_1338")||"").trim(),
-    email:String(data.get("input_3")||"").trim(),
-    extension:String(data.get("input_1340")||"").trim(),
-    description:String(data.get("lead_notes")||"").trim(),
-    source:"PPV event kiosk",
-    website_status:"Website form submit attempted",
-    backup_status:"Saved locally before website submit"
-  };
-}
-function prepareOfficialContact(event){
-  resetIdle();
-  const form=event.currentTarget;
-  const lead=officialLeadFromForm(form);
-  const hiddenMessage=form.querySelector("#officialContactMessage");
-  hiddenMessage.value=[
-    `Department / Agency: ${lead.department||"Not provided"}`,
-    "",
-    lead.description ? `Message: ${lead.description}` : "Message: Contact request from PPV event kiosk."
-  ].join("\n");
-  let savedBackup=false;
-  let savedLead=lead;
-  try{
-    savedLead=storeLead(lead,false);
-    savedBackup=true;
-  }catch(error){}
-  if(savedBackup)saveOnlineBackup(savedLead);
-  setContactMessage(savedBackup ? "Saved to kiosk backup. Sending to the website and online backup..." : "Sending to the website form, but local backup could not be saved.","");
-  clearTimeout(contactSubmitTimer);
-  contactSubmitTimer=setTimeout(()=>{
-    setContactMessage(savedBackup ? "Saved to backup and sent to the website form. Online backup will show on any computer once connected." : "Website form sent. Please write this lead down because backup did not save.","success");
-    form.reset();
-  },2500);
-}
-function leadFromForm(form){
-  const data=new FormData(form);
-  return {
-    name:String(data.get("name")||"").trim(),
     department:String(data.get("department")||"").trim(),
     phone:String(data.get("phone")||"").trim(),
     email:String(data.get("email")||"").trim(),
+    extension:String(data.get("extension")||"").trim(),
     description:String(data.get("description")||"").trim(),
     website:String(data.get("website")||"").trim(),
-    source:"PPV event kiosk"
+    source:"PPV event kiosk",
+    event:"Trade show kiosk",
+    backup_status:"Saved on kiosk",
+    email_status:"Email pending"
   };
 }
-async function sendLead(lead){
-  const response=await fetch(LEADS_ENDPOINT,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(lead)});
-  const body=await response.json().catch(()=>({}));
-  if(!response.ok||body.ok===false)throw new Error(body.error||"Lead storage is not connected yet.");
-  return body;
-}
-function storeLead(lead,pending=true){
-  const id=lead.id||((window.crypto&&crypto.randomUUID)?crypto.randomUUID():`${Date.now()}-${Math.round(Math.random()*100000)}`);
-  const saved={...lead,id,created_at:lead.created_at||new Date().toISOString()};
-  saveStoredList(LOCAL_LEADS_KEY,[saved,...storedList(LOCAL_LEADS_KEY).filter(item=>item.id!==id)]);
-  if(pending)storePendingLead(saved);
-  return saved;
-}
-async function saveOnlineBackup(lead){
-  const queued={...lead,online_status:"Saving to online backup"};
-  updateStoredLead(LOCAL_LEADS_KEY,queued);
-  try{
-    await sendLead(queued);
-    const saved={...queued,online_status:"Saved to online backup"};
-    updateStoredLead(LOCAL_LEADS_KEY,saved);
-    removePendingLead(saved.id);
-  }catch(error){
-    const pending={...queued,online_status:"Online backup pending",online_error:error.message};
-    updateStoredLead(LOCAL_LEADS_KEY,pending);
-    storePendingLead(pending);
-  }
-}
-async function submitContact(event){
+async function saveEventLead(event){
   event.preventDefault();
   resetIdle();
-  const form=event.currentTarget, button=form.querySelector("button");
-  const lead=leadFromForm(form);
+  const form=event.currentTarget, button=form.querySelector("button[type='submit']");
+  const lead=eventLeadFromForm(form);
+  if(lead.website)return;
   if(!lead.name||!lead.department||(!lead.phone&&!lead.email)){
     setContactMessage("Please enter name, department, and either phone or email.","error");
     return;
   }
   button.disabled=true;
-  setContactMessage("Submitting contact...");
+  let savedLead=null;
   try{
-    await sendLead(lead);
-    storeLead(lead,false);
-    form.reset();
-    setContactMessage("Submitted. Our team will follow up after the event.","success");
+    savedLead=storeLead(lead);
   }catch(error){
-    storeLead(lead,true);
-    form.reset();
-    setContactMessage("Saved on this kiosk. It will send automatically when lead storage is connected.","success");
-  }finally{
+    setContactMessage("Could not save this lead. Please write it down.","error");
     button.disabled=false;
+    return;
   }
+  setContactMessage("Saved locally. Emailing lead to tsweeney@gmcity.com...");
+  try{
+    await emailLead(savedLead);
+    updateLead({...savedLead,email_status:`Email sent to ${LEAD_EMAIL_TO}`});
+    setContactMessage("Saved locally and emailed to tsweeney@gmcity.com.","success");
+  }catch(error){
+    updateLead({...savedLead,email_status:`Email not sent: ${error.message}`});
+    setContactMessage("Saved locally. Email did not send, so export from Event Leads after the show.","success");
+  }
+  clearTimeout(contactSubmitTimer);
+  contactSubmitTimer=setTimeout(()=>{
+    setContactMessage("Ready when you are.");
+    form.reset();
+    button.disabled=false;
+  },2500);
 }
-async function retryPendingLeads(){
-  const pending=storedList(PENDING_LEADS_KEY);
-  if(!pending.length)return;
-  const remaining=[];
-  for(const lead of pending){
-    try{
-      await sendLead(lead);
-      updateStoredLead(LOCAL_LEADS_KEY,{...lead,online_status:"Saved to online backup"});
-    }
-    catch{remaining.push(lead)}
-  }
-  saveStoredList(PENDING_LEADS_KEY,remaining);
+function storeLead(lead){
+  const id=lead.id||((window.crypto&&crypto.randomUUID)?crypto.randomUUID():`${Date.now()}-${Math.round(Math.random()*100000)}`);
+  const saved={...lead,id,created_at:lead.created_at||new Date().toISOString()};
+  saveStoredList(LOCAL_LEADS_KEY,[saved,...storedList(LOCAL_LEADS_KEY).filter(item=>item.id!==id)]);
+  return saved;
+}
+function updateLead(lead){
+  const list=storedList(LOCAL_LEADS_KEY);
+  const index=list.findIndex(item=>item.id===lead.id);
+  if(index>=0)list[index]={...list[index],...lead};
+  else list.unshift(lead);
+  saveStoredList(LOCAL_LEADS_KEY,list);
+}
+async function emailLead(lead){
+  const response=await fetch(LEAD_EMAIL_ENDPOINT,{
+    method:"POST",
+    headers:{"Content-Type":"application/json","Accept":"application/json"},
+    body:JSON.stringify({
+      _subject:"New PPV event lead",
+      _template:"table",
+      _captcha:"false",
+      _replyto:lead.email,
+      name:lead.name,
+      first_name:lead.first_name,
+      last_name:lead.last_name,
+      department:lead.department,
+      phone:lead.phone,
+      extension:lead.extension,
+      email:lead.email,
+      notes:lead.description||"No notes provided",
+      source:lead.source,
+      submitted_at:lead.created_at
+    })
+  });
+  const body=await response.json().catch(()=>({}));
+  if(!response.ok||body.success===false)throw new Error(body.message||`Email request failed (${response.status})`);
+  return body;
 }
 document.querySelector("#contactButton").addEventListener("click",openContact);
 document.querySelector("#closeContact").addEventListener("click",closeContact);
 document.querySelector("#contactBackButton").addEventListener("click",closeContact);
-document.querySelector("#reloadContact").addEventListener("click",()=>{
-  const frame=document.querySelector("#websiteContactFrame");
-  if(!frame)return;
-  frame.src="about:blank";
-  requestAnimationFrame(()=>{frame.src=OFFICIAL_CONTACT_URL});
-});
+document.querySelector("#eventLeadForm").addEventListener("submit",saveEventLead);
 loadContent();

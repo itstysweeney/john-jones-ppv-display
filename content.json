@@ -1,5 +1,5 @@
 {
-  "contentVersion": "featured-upfits-2026-07-16-photo-order",
+  "contentVersion": "featured-upfits-2026-07-21-delivery-highlights",
   "heading": "FEATURED UPFITS",
   "subheading": "INTERACTIVE BUILD GALLERY",
   "attractHeading": "PURPOSE BUILT FOR THE MISSION",
@@ -154,21 +154,22 @@
       ]
     },
     {
-      "title": "Chevrolet Tahoe Upfit Delivery: Jeffersonville Police Department",
+      "title": "Jeffersonville PD K9 Tahoe",
       "modelYear": "2025",
       "builtFor": "Jeffersonville Police Department",
       "agencyType": "K-9 / Patrol",
-      "sourceUrl": "https://www.policepursuitvehicles.com/chevrolet-tahoe-upfit-delivery-jeffersonville-police-department/",
-      "description": "A 2025 Chevrolet Tahoe Police Pursuit upfit for Jeffersonville Police Department, featuring a K-9-focused configuration with partitioning, rear storage, emergency lighting, and duty-ready equipment placement.",
+      "sourceUrl": "",
+      "description": "A Jeffersonville Police Department K-9 Tahoe upfit built around handler safety, secure K-9 transport, emergency lighting, storage, and patrol-ready equipment placement.",
       "images": [
-        "https://di-uploads-pod47.dealerinspire.com/johnjonespolicevehicles/uploads/2026/02/IMG_5967-1024x768.jpg",
-        "https://di-uploads-pod47.dealerinspire.com/johnjonespolicevehicles/uploads/2026/02/IMG_5965.jpg",
-        "https://di-uploads-pod47.dealerinspire.com/johnjonespolicevehicles/uploads/2026/02/IMG_5950.jpg",
-        "https://di-uploads-pod47.dealerinspire.com/johnjonespolicevehicles/uploads/2026/02/IMG_5960.jpg",
-        "https://di-uploads-pod47.dealerinspire.com/johnjonespolicevehicles/uploads/2026/02/IMG_5959.jpg",
-        "https://di-uploads-pod47.dealerinspire.com/johnjonespolicevehicles/uploads/2026/02/IMG_5969.jpg",
-        "https://di-uploads-pod47.dealerinspire.com/johnjonespolicevehicles/uploads/2026/02/IMG_5973.jpg",
-        "https://di-uploads-pod47.dealerinspire.com/johnjonespolicevehicles/uploads/2026/02/IMG_5945-1.jpg"
+        "uploads/highlights/jeffersonville-pd-k9-tahoe/02-img_5945.jpg",
+        "uploads/highlights/jeffersonville-pd-k9-tahoe/03-img_5949.jpg",
+        "uploads/highlights/jeffersonville-pd-k9-tahoe/04-img_5953.jpg",
+        "uploads/highlights/jeffersonville-pd-k9-tahoe/05-img_5957.jpg",
+        "uploads/highlights/jeffersonville-pd-k9-tahoe/06-img_5960.jpg",
+        "uploads/highlights/jeffersonville-pd-k9-tahoe/07-img_5964.jpg",
+        "uploads/highlights/jeffersonville-pd-k9-tahoe/08-img_5969.jpg",
+        "uploads/highlights/jeffersonville-pd-k9-tahoe/09-img_5976.jpg",
+        "uploads/highlights/jeffersonville-pd-k9-tahoe/10-img_5980.jpg"
       ]
     },
     {
@@ -190,14 +191,22 @@
       ]
     },
     {
-      "title": "Chevrolet Tahoe Upfit Delivery: Jeffersontown Fire Department",
-      "modelYear": "2026",
+      "title": "Jeffersontown Fire Tahoes and Silverado",
+      "modelYear": "Model Year Varies",
       "builtFor": "Jeffersontown Fire Department",
       "agencyType": "Fire Command",
-      "sourceUrl": "https://www.policepursuitvehicles.com/chevrolet-tahoe-upfit-delivery-jeffersontown-fire-department/",
-      "description": "A Chevrolet Tahoe fire department upfit for Jeffersontown Fire Department, built as a command-focused public safety vehicle with emergency-response equipment, lighting, and practical storage for field operations.",
+      "sourceUrl": "",
+      "description": "Marked fire command and support builds for Jeffersontown Fire Department, highlighting Tahoe and Silverado upfits configured for emergency response, high visibility, and field-ready equipment access.",
       "images": [
-        "https://di-uploads-pod47.dealerinspire.com/johnjonespolicevehicles/uploads/2026/02/IMG_6033-1024x768.jpg"
+        "uploads/highlights/jeffersontown-fire-tahoes-silverado/02-img_6013.jpg",
+        "uploads/highlights/jeffersontown-fire-tahoes-silverado/03-img_6018.jpg",
+        "uploads/highlights/jeffersontown-fire-tahoes-silverado/04-img_6021.jpg",
+        "uploads/highlights/jeffersontown-fire-tahoes-silverado/05-img_6025.jpg",
+        "uploads/highlights/jeffersontown-fire-tahoes-silverado/06-img_6028.jpg",
+        "uploads/highlights/jeffersontown-fire-tahoes-silverado/07-img_6034.jpg",
+        "uploads/highlights/jeffersontown-fire-tahoes-silverado/08-img_6039.jpg",
+        "uploads/highlights/jeffersontown-fire-tahoes-silverado/09-img_6048.jpg",
+        "uploads/highlights/jeffersontown-fire-tahoes-silverado/10-img_6055.jpg"
       ]
     },
     {
@@ -215,6 +224,114 @@
         "https://di-uploads-pod47.dealerinspire.com/johnjonespolicevehicles/uploads/2026/05/IMG_7827-2.jpg",
         "https://di-uploads-pod47.dealerinspire.com/johnjonespolicevehicles/uploads/2026/05/IMG_7830.jpg",
         "https://di-uploads-pod47.dealerinspire.com/johnjonespolicevehicles/uploads/2026/05/IMG_7819-2.jpg"
+      ]
+    },
+    {
+      "title": "Monroe County Pacifica",
+      "modelYear": "Model Year Varies",
+      "builtFor": "Monroe County",
+      "agencyType": "Public Safety / Transport",
+      "sourceUrl": "",
+      "description": "A Monroe County Pacifica upfit focused on practical public safety transport, clean equipment integration, visibility, and dependable day-to-day field use.",
+      "images": [
+        "uploads/highlights/monroe-county-pacifica/02-img_6327.jpg",
+        "uploads/highlights/monroe-county-pacifica/03-img_6330.jpg",
+        "uploads/highlights/monroe-county-pacifica/04-img_6333.jpg",
+        "uploads/highlights/monroe-county-pacifica/05-img_6336.jpg",
+        "uploads/highlights/monroe-county-pacifica/06-img_6342.jpg",
+        "uploads/highlights/monroe-county-pacifica/07-img_6345.jpg",
+        "uploads/highlights/monroe-county-pacifica/08-img_6349.jpg",
+        "uploads/highlights/monroe-county-pacifica/09-img_6353.jpg",
+        "uploads/highlights/monroe-county-pacifica/10-img_6359.jpg"
+      ]
+    },
+    {
+      "title": "Monroe County ProMaster",
+      "modelYear": "Model Year Varies",
+      "builtFor": "Monroe County",
+      "agencyType": "Public Safety / Specialty Van",
+      "sourceUrl": "",
+      "description": "A Monroe County ProMaster specialty upfit built for utility, equipment access, interior function, and the space needed for public safety operations.",
+      "images": [
+        "uploads/highlights/monroe-county-promaster/02-img_6288.jpg",
+        "uploads/highlights/monroe-county-promaster/03-img_6292.jpg",
+        "uploads/highlights/monroe-county-promaster/04-img_6295.jpg",
+        "uploads/highlights/monroe-county-promaster/05-img_6300.jpg",
+        "uploads/highlights/monroe-county-promaster/06-img_6304.jpg",
+        "uploads/highlights/monroe-county-promaster/07-img_6307.jpg",
+        "uploads/highlights/monroe-county-promaster/08-img_6311.jpg",
+        "uploads/highlights/monroe-county-promaster/09-img_6317.jpg",
+        "uploads/highlights/monroe-county-promaster/10-img_6322.jpg"
+      ]
+    },
+    {
+      "title": "Floyd County Durangos",
+      "modelYear": "Model Year Varies",
+      "builtFor": "Floyd County",
+      "agencyType": "Patrol",
+      "sourceUrl": "",
+      "description": "Floyd County Dodge Durango patrol upfits configured for road-ready law enforcement work, emergency visibility, duty equipment, and reliable fleet use.",
+      "images": [
+        "uploads/highlights/floyd-county-durangos/01-img_6058.jpg",
+        "uploads/highlights/floyd-county-durangos/02-img_6060.jpg",
+        "uploads/highlights/floyd-county-durangos/03-img_6080.jpg",
+        "uploads/highlights/floyd-county-durangos/04-img_6085.jpg",
+        "uploads/highlights/floyd-county-durangos/05-img_6086.jpg",
+        "uploads/highlights/floyd-county-durangos/06-img_6087.jpg"
+      ]
+    },
+    {
+      "title": "IU Health Patrol K9 Durangos",
+      "modelYear": "Model Year Varies",
+      "builtFor": "IU Health",
+      "agencyType": "Patrol / K-9",
+      "sourceUrl": "",
+      "description": "IU Health Patrol and K-9 Durango upfits built for security response, visibility, K-9 needs, and dependable public safety operations across active healthcare environments.",
+      "images": [
+        "uploads/highlights/iu-health-patrol-k9-durangos/02-img_4793.jpg",
+        "uploads/highlights/iu-health-patrol-k9-durangos/03-img_4797.jpg",
+        "uploads/highlights/iu-health-patrol-k9-durangos/04-img_4800.jpg",
+        "uploads/highlights/iu-health-patrol-k9-durangos/05-img_4804.jpg",
+        "uploads/highlights/iu-health-patrol-k9-durangos/06-img_4807.jpg",
+        "uploads/highlights/iu-health-patrol-k9-durangos/07-img_4811.jpg",
+        "uploads/highlights/iu-health-patrol-k9-durangos/08-img_4814.jpg",
+        "uploads/highlights/iu-health-patrol-k9-durangos/09-img_4818.jpg",
+        "uploads/highlights/iu-health-patrol-k9-durangos/10-img_4821.jpg"
+      ]
+    },
+    {
+      "title": "Brown County Sheriff Upfit",
+      "modelYear": "Model Year Varies",
+      "builtFor": "Brown County Sheriff's Office",
+      "agencyType": "Sheriff / Patrol",
+      "sourceUrl": "",
+      "description": "A Brown County Sheriff's Office patrol upfit configured for emergency visibility, duty equipment access, and dependable day-to-day public safety work.",
+      "images": [
+        "uploads/highlights/brown-county-sheriff-upfit/01-img-1998.jpg",
+        "uploads/highlights/brown-county-sheriff-upfit/02-img-2001.jpg",
+        "uploads/highlights/brown-county-sheriff-upfit/03-img-2019.jpg",
+        "uploads/highlights/brown-county-sheriff-upfit/04-img-2020.jpg",
+        "uploads/highlights/brown-county-sheriff-upfit/05-img-1995.jpg"
+      ]
+    },
+    {
+      "title": "Blackford Police Department Upfits",
+      "modelYear": "Model Year Varies",
+      "builtFor": "Blackford Police Department",
+      "agencyType": "Patrol",
+      "sourceUrl": "",
+      "description": "Blackford Police Department patrol upfits built around clean equipment placement, emergency lighting, and practical fleet-ready operation.",
+      "images": [
+        "uploads/highlights/blackford-police-department-upfits/01-img-2628-2.jpg",
+        "uploads/highlights/blackford-police-department-upfits/02-img-8366-2.jpg",
+        "uploads/highlights/blackford-police-department-upfits/03-img-8388-2.jpg",
+        "uploads/highlights/blackford-police-department-upfits/04-img-8389-2.jpg",
+        "uploads/highlights/blackford-police-department-upfits/05-img-8392-2.jpg",
+        "uploads/highlights/blackford-police-department-upfits/06-img-8398-2.jpg",
+        "uploads/highlights/blackford-police-department-upfits/07-img-8399-2.jpg",
+        "uploads/highlights/blackford-police-department-upfits/08-img-8402-2.jpg",
+        "uploads/highlights/blackford-police-department-upfits/09-img-8403-2.jpg",
+        "uploads/highlights/blackford-police-department-upfits/10-img-8406-2.jpg"
       ]
     }
   ]
